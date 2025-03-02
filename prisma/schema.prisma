@@ -24,3 +24,23 @@ model User {
 
   @@map("users")
 }
+
+model TestCase {
+  id              String   @id @default(uuid())
+  feature         String
+  title           String   @unique
+  description     String
+  active          Boolean
+  criticality     String?
+  priority        String?
+  severity        String?
+  platform        String[]
+  type            String
+  prerequisite    String?
+  steps           String
+  expected_result String
+  observation     String?
+  created_at      DateTime @default(now())
+
+  @@map("tests_cases")
+}
