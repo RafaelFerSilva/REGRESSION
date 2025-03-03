@@ -17,8 +17,6 @@ let user: User
 describe('Team Use Case', () => {
   beforeEach(async () => {
     usersRepository = new InMemoryUsersRepository()
-    usersRepository = new InMemoryUsersRepository()
-
     teamsRepository = new InMemoryTeamsRepository()
     sut = new CreateTeamUseCase(teamsRepository, usersRepository)
 
