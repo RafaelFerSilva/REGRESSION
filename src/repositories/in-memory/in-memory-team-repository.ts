@@ -5,7 +5,7 @@ export class InMemoryTeamsRepository implements TeamsRepository {
   
   public items: Team[] = []
 
-  async create(data: Prisma.TeamCreateInput): Promise<Team> {
+  async create(data: Prisma.TeamUncheckedCreateInput): Promise<Team> {
     const team = {
       id: 'team-1',
       name: data.name,

@@ -2,7 +2,6 @@ import { TeamsRepository } from "@/repositories/teams.repository";
 import { Team } from "@prisma/client";
 import { UserNotExistError } from "./erros/user-not-exists-error";
 import { TeamAlreadyExistError } from "./erros/team-already-exists-error";
-import { RegisterUseCase } from "./register";
 import { UsersRepository } from "@/repositories/users.repository";
 
 
@@ -12,7 +11,7 @@ interface TeamUseCaseRequest {
 }
 
 interface TeamUseCaseResponse {
-  team: Team
+  team: Team | null
 }
 
 export class CreateTeamUseCase {
@@ -20,13 +19,18 @@ export class CreateTeamUseCase {
 
   async execute({ name, userId }: TeamUseCaseRequest): Promise<TeamUseCaseResponse> {
     const user = await this.userRepository.findById(userId)
-    const teamWithSameName = await this.teamsRepository.findByName(name)
-
     if (!user) throw new UserNotExistError()
+    
+    const teamWithSameName = await this.teamsRepository.findByName(name)
     if (teamWithSameName) throw new TeamAlreadyExistError()
 
+    const team = await this.teamsRepository.create({
+      name: name,
+      userId: userId
+    })
+
     return {
-      team: null
+      team
     }
   }
 }

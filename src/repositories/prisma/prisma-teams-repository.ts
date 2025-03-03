@@ -4,7 +4,7 @@ import { prisma } from "lib/prisma";
 
 export class PrismaTeamsRepository implements TeamsRepository{
   
-  async create(data: Prisma.TeamCreateInput): Promise<Team> {
+  async create(data: Prisma.TeamUncheckedCreateInput): Promise<Team> {
     const team = await prisma.team.create({ data })
     return team
   }

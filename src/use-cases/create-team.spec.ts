@@ -5,6 +5,8 @@ import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-user
 import { hash } from "bcryptjs";
 import { User } from "@prisma/client";
 import { UserNotExistError } from "./erros/user-not-exists-error";
+import { TeamAlreadyExistError } from "./erros/team-already-exists-error";
+import { randomUUID } from 'node:crypto'
 
 let teamsRepository: InMemoryTeamsRepository
 let sut: CreateTeamUseCase
@@ -33,7 +35,7 @@ describe('Team Use Case', () => {
 
   it('should be able to create a new team', async () => {
     const { team } = await sut.execute({
-      name: 'Team 1',
+      name: `Team ${randomUUID()}`,
       userId: user.id
     })
   })
@@ -41,9 +43,33 @@ describe('Team Use Case', () => {
   it('should not be able to create a new team with not existing user', async () => {
     await expect(
       sut.execute({
-        name: 'Team 1',
+        name: `Team ${randomUUID()}`,
         userId: 'no-existing-user'
       })
     ).rejects.toBeInstanceOf(UserNotExistError)
+  })
+
+  it('should not be able to create a new team with empty user id', async () => {
+    await expect(
+      sut.execute({
+        name: `Team ${randomUUID()}`,
+        userId: ''
+      })
+    ).rejects.toBeInstanceOf(UserNotExistError)
+  })
+
+  it('should not be able to create a new team with already existing name', async () => {
+    const teamName = 'Team 1'
+    await sut.execute({
+      name: teamName,
+      userId: user.id
+    })
+
+    await expect(
+      sut.execute({
+        name: teamName,
+        userId: user.id
+      })
+    ).rejects.toBeInstanceOf(TeamAlreadyExistError)
   })
 })
