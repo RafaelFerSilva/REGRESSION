@@ -7,7 +7,7 @@ interface RegisterUseCaseRequest {
   email: string,
   password: string,
   rule: string,
-  active?: boolean
+  active: boolean
 }
 
 interface RegisterUseCaseResponse {
