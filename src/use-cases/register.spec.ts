@@ -1,26 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { RegisterUseCase } from './register'
-import { compare } from 'bcryptjs'
+import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-user-repository'
+import { UserAlreadyExistError } from './erros/user-already-exists-error'
 
 describe('Register Use Case', () => {
-  it('should hash user password upon registration', async () => {
-    const registerUseCase = new RegisterUseCase({
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      async findByEmail(email: string) {
-        return null
-      },
-      async create(data: any) {
-        return {
-          id: 'user-1',
-          name: data.name,
-          email:data.email,
-          password_hash:data.password_hash,
-          rule: data.rule,
-          active: data.active,
-          created_at: new Date()
-        }
-      }
-    })
+  it('should be able to register', async () => {
+    const usersRepository = new InMemoryUserRepository()
+    const registerUseCase = new RegisterUseCase(usersRepository)
 
     const { user } = await registerUseCase.execute({
       name: 'John Doe',
@@ -28,8 +14,31 @@ describe('Register Use Case', () => {
       password: '123456',
       rule: 'QA',
     })
+    expect(user.id).toEqual(expect.any(String))
+  })
 
-    const isPasswordCorrectlyHashed = await compare('123456', user.password_hash)
-    expect(isPasswordCorrectlyHashed).toBe(true)
+  it('should hash user password upon registration', async () => {
+    const usersRepository = new InMemoryUserRepository()
+    const registerUseCase = new RegisterUseCase(usersRepository)
+
+    const email = 'johndoe@example.com'
+
+    await registerUseCase.execute({
+      name: 'John Doe',
+      email,
+      password: '123456',
+      rule: 'QA',
+    })
+
+    await expect(() => 
+      registerUseCase.execute({
+        name: 'John Doe',
+        email,
+        password: '123456',
+        rule: 'QA',
+      }),
+    ).rejects.toBeInstanceOf(UserAlreadyExistError)
+
+    
   })
 })
