@@ -22,6 +22,7 @@ export class GetTeamUseCase {
     const teamResponse = {
       name: team.name,
       created_at: team.created_at,
+      userId: team.userId
     }
 
     return { 
