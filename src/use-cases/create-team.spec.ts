@@ -27,8 +27,6 @@ describe('Team Use Case', () => {
       rule: 'QA',
       active: true
     })
-
-    
   })
 
   it('should be able to create a new team', async () => {
