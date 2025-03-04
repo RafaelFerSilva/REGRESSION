@@ -7,10 +7,10 @@ export class InMemoryTeamsRepository implements TeamsRepository {
 
   async create(data: Prisma.TeamUncheckedCreateInput): Promise<Team> {
     const team = {
-      id: 'team-1',
+      id: `${data.id}`,
       name: data.name,
       created_at: new Date(),
-      userId: 'user-1'
+      userId: data.userId
     }
 
     this.items.push(team)
@@ -39,6 +39,17 @@ export class InMemoryTeamsRepository implements TeamsRepository {
 
   async findAll(page: number) {
     return this.items.slice((page - 1) * 20, page * 20)
+  }
+
+  async findManyByUserIdAll(userId: string, page?: number) {
+
+    if (page) {
+      return this.items
+      .filter((item) => item.userId === userId)
+      .slice((page - 1) * 20, page * 20)
+    }
+    
+    return this.items.filter((item) => item.userId === userId)
   }
 
 }

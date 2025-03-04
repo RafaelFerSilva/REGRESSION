@@ -2,8 +2,8 @@ import { Prisma, Team } from "@prisma/client";
 import { TeamsRepository } from "../interfaces/teams-repository";
 import { prisma } from "lib/prisma";
 
-export class PrismaTeamsRepository implements TeamsRepository{
-  
+export class PrismaTeamsRepository implements TeamsRepository {
+
   async create(data: Prisma.TeamUncheckedCreateInput): Promise<Team> {
     const team = await prisma.team.create({ data })
     return team
@@ -32,6 +32,17 @@ export class PrismaTeamsRepository implements TeamsRepository{
   async findAll(page: number) {
     const teams = await prisma.team.findMany()
     return teams.slice((page - 1) * 20, page * 20)
+  }
+
+  async findManyByUserIdAll(userId: string, page?: number) {
+    const teams = await prisma.team.findMany(
+      {
+        where: { userId, }
+      })
+    
+    if(page)  return teams.slice((page - 1) * 20, page * 20)
+    
+    return teams
   }
 
 }

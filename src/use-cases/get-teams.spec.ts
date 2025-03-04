@@ -48,7 +48,7 @@ describe('Get All Teams Use Case', () => {
     ])
   })
 
-  it('should be able to fetch all paginated users profiles', async () => {
+  it('should be able to fetch all paginated teams', async () => {
     for (let i = 1; i <= 22; i++) {
       await teamsRepository.create({
         name: `team-${i}`,

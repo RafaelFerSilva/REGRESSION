@@ -4,9 +4,10 @@
 - [] Retornar usuários pelo rule
 
 - [x] Criar times
-- [x] Listar times
-- [] Update de times
+- [x] Listar todos os times
 - [] Retornar os times criados por um usuário
+- [] Update de times
+
 
 
 - [] Criar features

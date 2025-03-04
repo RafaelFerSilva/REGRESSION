@@ -5,4 +5,5 @@ export interface TeamsRepository {
   findById(id: string): Promise<Team | null>
   findByName(name: string): Promise<Team | null>
   findAll(page: number): Promise<Team[] | []>
+  findManyByUserIdAll(userId: string, page?: number): Promise<Team[] | []>
 }

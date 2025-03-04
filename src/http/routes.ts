@@ -6,6 +6,7 @@ import { getUserProfile } from "./controllers/get_user_profile";
 import { getTeam } from "./controllers/get_team";
 import { getUsersProfiles } from "./controllers/get_users_profiles";
 import { getTeams } from "./controllers/get_teams";
+import { getUserTeams } from "./controllers/get_user_teams";
 
 export async function appRoutes(app:FastifyInstance) {
   app.post('/users', register)
@@ -15,4 +16,5 @@ export async function appRoutes(app:FastifyInstance) {
   app.get('/users/:page', getUsersProfiles)
   app.get('/team/:teamId', getTeam)
   app.get('/teams/:page', getTeams)
+  app.get('/user_teams/:userId/:page', getUserTeams)
 }
