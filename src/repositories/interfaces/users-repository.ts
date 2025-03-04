@@ -6,4 +6,5 @@ export interface UsersRepository {
   findById(id: string): Promise<User | null>
   findAll(page: number): Promise<User[] | []>
   findByRule(rule: string, page?: number): Promise<User[] | []>
+  update(id: string, data: Prisma.UserCreateInput): Promise<User>
 }

@@ -1,12 +1,13 @@
 - [x] Criar usuários
 - [x] Listar usuários
 - [] Update de usuários
-- [] Retornar usuários pelo rule
+- [x] Retornar usuários pelo rule
 
 - [x] Criar times
 - [x] Listar todos os times
-- [x] Retornar os times criados por um usuário
 - [] Update de times
+- [x] Retornar os times criados por um usuário
+
 
 
 
