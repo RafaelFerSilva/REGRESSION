@@ -1,7 +1,7 @@
 import { TeamResponse } from "@/interfaces/team-interfaces";
 import { TeamsRepository } from "@/repositories/interfaces/teams-repository";
 import { UsersRepository } from "@/repositories/interfaces/users-repository";
-import { ResourceNotFoundError } from "./erros/resource-not-found-error";
+import { UserNotExistError } from "./errors/user-not-exists-error";
 
 interface GetUserTeamsUseCaseRequest {
   userId: string
@@ -20,7 +20,7 @@ export class GetUserTeamsUseCase {
     page,
   }: GetUserTeamsUseCaseRequest): Promise<GetUserTeamsUseCaseResponse> {
     const user = await this.usersRepository.findById(userId)
-    if(!user) throw new ResourceNotFoundError()
+    if(!user) throw new UserNotExistError()
     const teams = await this.teamsRepository.findManyByUserId(user.id, Number(page))
 
     const teamsResponse = teams.map((item) => {

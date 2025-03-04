@@ -2,7 +2,7 @@ import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-user
 import { GetUserProfileUseCase } from "./get-user-profile"
 import { beforeEach, describe, expect, it } from "vitest"
 import { hash } from "bcryptjs"
-import { ResourceNotFoundError } from "./erros/resource-not-found-error"
+import { UserNotExistError } from "./errors/user-not-exists-error"
 
 let usersRepository: InMemoryUsersRepository
 let sut: GetUserProfileUseCase
@@ -35,7 +35,7 @@ describe('Get User Profile Use Case', () => {
       sut.execute({
         userId: 'non-existing-id',
       }),
-    ).rejects.toBeInstanceOf(ResourceNotFoundError)
+    ).rejects.toBeInstanceOf(UserNotExistError)
   })
 })
 

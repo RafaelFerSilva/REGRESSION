@@ -1,4 +1,4 @@
-import { ResourceNotFoundError } from "@/use-cases/erros/resource-not-found-error";
+import { UserNotExistError } from "@/use-cases/errors/user-not-exists-error";
 import { makeGetUserTeamsUseCase } from "@/use-cases/factories/make-user-teams-use-case";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { z } from "zod";
@@ -19,7 +19,7 @@ export async function getUserTeams(request: FastifyRequest, reply: FastifyReply)
     })
     return reply.status(200).send({ teams });
   } catch (error) {
-    if (error instanceof ResourceNotFoundError) return reply.status(404).send({ message: error.message })
+    if (error instanceof UserNotExistError) return reply.status(404).send({ message: error.message })
 
     throw error
   }

@@ -4,8 +4,8 @@ import { CreateTeamUseCase } from "./create-teams";
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-user-repository";
 import { hash } from "bcryptjs";
 import { User } from "@prisma/client";
-import { UserNotExistError } from "./erros/user-not-exists-error";
-import { TeamAlreadyExistError } from "./erros/team-already-exists-error";
+import { UserNotExistError } from "./errors/user-not-exists-error";
+import { TeamAlreadyExistError } from "./errors/team-already-exists-error";
 import { randomUUID } from 'node:crypto'
 
 let teamsRepository: InMemoryTeamsRepository

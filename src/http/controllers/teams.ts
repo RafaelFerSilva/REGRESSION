@@ -1,5 +1,5 @@
-import { TeamAlreadyExistError } from "@/use-cases/erros/team-already-exists-error";
-import { UserNotExistError } from "@/use-cases/erros/user-not-exists-error";
+import { TeamAlreadyExistError } from "@/use-cases/errors/team-already-exists-error";
+import { UserNotExistError } from "@/use-cases/errors/user-not-exists-error";
 import { makeCreateTeamCase } from "@/use-cases/factories/make-create-team-use-case";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { z } from "zod";

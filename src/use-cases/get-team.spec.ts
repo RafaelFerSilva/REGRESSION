@@ -1,11 +1,11 @@
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-user-repository"
 import { beforeEach, describe, expect, it } from "vitest"
 import { hash } from "bcryptjs"
-import { ResourceNotFoundError } from "./erros/resource-not-found-error"
 import { InMemoryTeamsRepository } from "@/repositories/in-memory/in-memory-team-repository"
 import { GetTeamUseCase } from "./get-team"
 import { randomUUID } from "node:crypto"
 import { User } from "@prisma/client"
+import { TeamNotExistError } from "./errors/team-not-exists-error"
 
 let teamsRepository: InMemoryTeamsRepository
 let sut: GetTeamUseCase
@@ -43,7 +43,7 @@ describe('Get Team Use Case', () => {
   it('should not be able to get team with wrong id', async () => {
     await expect(() =>
       sut.execute({ teamId: 'no-existing.id' }),
-    ).rejects.toBeInstanceOf(ResourceNotFoundError)
+    ).rejects.toBeInstanceOf(TeamNotExistError)
   })
 })
 
