@@ -1,5 +1,5 @@
 import { Prisma, Team } from "@prisma/client";
-import { TeamsRepository } from "../teams.repository";
+import { TeamsRepository } from "../interfaces/teams-repository";
 import { prisma } from "lib/prisma";
 
 export class PrismaTeamsRepository implements TeamsRepository{

@@ -1,6 +1,6 @@
 import { ResourceNotFoundError } from "./erros/resource-not-found-error";
-import { TeamResponse } from "@/interfaces/team.interfaces";
-import { TeamsRepository } from "@/repositories/teams.repository";
+import { TeamResponse } from "@/interfaces/team-interfaces";
+import { TeamsRepository } from "@/repositories/interfaces/teams-repository";
 
 interface GetTeamUseCaseRequest {
   teamId: string

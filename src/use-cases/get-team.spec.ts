@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from "vitest"
 import { hash } from "bcryptjs"
 import { ResourceNotFoundError } from "./erros/resource-not-found-error"
 import { InMemoryTeamsRepository } from "@/repositories/in-memory/in-memory-team-repository"
-import { GetTeamUseCase } from "./get-teams"
+import { GetTeamUseCase } from "./get-team"
 import { randomUUID } from "node:crypto"
 import { User } from "@prisma/client"
 

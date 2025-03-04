@@ -1,5 +1,5 @@
 import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository'
-import { RegisterUseCase } from '../register'
+import { CreateUserUseCase } from '../create-users'
 import { PrismaTeamsRepository } from '@/repositories/prisma/prisma-teams-repository'
 import { CreateTeamUseCase } from '../create-teams'
 

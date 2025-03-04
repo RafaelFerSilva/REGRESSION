@@ -15,6 +15,8 @@ export default defineConfig({
         '**/app.ts',
         '**/server.ts',
         '**/users.repository.ts',
+        '**/interfaces/**',
+        '**/factories/**',
         ...coverageConfigDefaults.exclude,
       ],
     },

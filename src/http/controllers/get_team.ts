@@ -1,6 +1,5 @@
 import { ResourceNotFoundError } from "@/use-cases/erros/resource-not-found-error";
-import { makeGetUserProfileUseCase } from "@/use-cases/factories/make-get-user-profile-use-case";
-import { makeTeamUseCase } from "@/use-cases/factories/make-team_use_case";
+import { makeTeamUseCase } from "@/use-cases/factories/make-team-use-case";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { z } from "zod";
 

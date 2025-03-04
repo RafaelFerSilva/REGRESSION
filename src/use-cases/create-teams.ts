@@ -1,8 +1,8 @@
-import { TeamsRepository } from "@/repositories/teams.repository";
+import { TeamsRepository } from "@/repositories/interfaces/teams-repository";
 import { Team } from "@prisma/client";
 import { UserNotExistError } from "./erros/user-not-exists-error";
 import { TeamAlreadyExistError } from "./erros/team-already-exists-error";
-import { UsersRepository } from "@/repositories/users.repository";
+import { UsersRepository } from "@/repositories/interfaces/users-repository";
 
 
 interface TeamUseCaseRequest {
