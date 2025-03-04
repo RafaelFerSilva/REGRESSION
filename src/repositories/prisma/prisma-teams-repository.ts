@@ -34,7 +34,7 @@ export class PrismaTeamsRepository implements TeamsRepository {
     return teams.slice((page - 1) * 20, page * 20)
   }
 
-  async findManyByUserIdAll(userId: string, page?: number) {
+  async findManyByUserId(userId: string, page?: number) {
     const teams = await prisma.team.findMany(
       {
         where: { userId, }

@@ -5,7 +5,7 @@
 
 - [x] Criar times
 - [x] Listar todos os times
-- [] Retornar os times criados por um usuário
+- [x] Retornar os times criados por um usuário
 - [] Update de times
 
 

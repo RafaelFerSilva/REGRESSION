@@ -3,7 +3,6 @@ import { Prisma, User } from "@prisma/client";
 import { UsersRepository } from "../interfaces/users-repository";
 
 export class PrismaUsersRepository implements UsersRepository {
-
   async create(data: Prisma.UserCreateInput) {
     const user = await prisma.user.create({
       data,
@@ -36,4 +35,18 @@ export class PrismaUsersRepository implements UsersRepository {
     const users = await prisma.user.findMany()
     return users.slice((page - 1) * 20, page * 20)
   }
+
+  async findByRule(rule: string, page: number) {
+    const users = await prisma.user.findMany({
+      where: {
+        rule,
+      },
+    })
+
+    if(page) {
+      return users.slice((page - 1) * 20, page * 20)
+    }
+    return users
+  }
+
 }

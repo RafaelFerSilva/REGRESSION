@@ -7,8 +7,9 @@ import { getTeam } from "./controllers/get_team";
 import { getUsersProfiles } from "./controllers/get_users_profiles";
 import { getTeams } from "./controllers/get_teams";
 import { getUserTeams } from "./controllers/get_user_teams";
+import { getUsersByRules } from "./controllers/get_users_by_rule";
 
-export async function appRoutes(app:FastifyInstance) {
+export async function appRoutes(app: FastifyInstance) {
   app.post('/users', register)
   app.post('/sessions', authenticate)
   app.post('/teams', teams)
@@ -17,4 +18,5 @@ export async function appRoutes(app:FastifyInstance) {
   app.get('/team/:teamId', getTeam)
   app.get('/teams/:page', getTeams)
   app.get('/user_teams/:userId/:page', getUserTeams)
+  app.get('/user_by_role/:rule/:page', getUsersByRules)
 }

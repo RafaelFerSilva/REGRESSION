@@ -43,4 +43,14 @@ export class InMemoryUsersRepository implements UsersRepository {
   async findAll(page: number) {
     return this.items.slice((page - 1) * 20, page * 20)
   }
+
+  async findByRule(rule: string, page?: number) {
+    if (page) {
+      return this.items
+      .filter((item) => item.rule === rule)
+      .slice((page - 1) * 20, page * 20)
+    }
+    
+    return this.items.filter((item) => item.rule === rule)
+  }
 }

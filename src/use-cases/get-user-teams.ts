@@ -21,7 +21,7 @@ export class GetUserTeamsUseCase {
   }: GetUserTeamsUseCaseRequest): Promise<GetUserTeamsUseCaseResponse> {
     const user = await this.usersRepository.findById(userId)
     if(!user) throw new ResourceNotFoundError()
-    const teams = await this.teamsRepository.findManyByUserIdAll(user.id, Number(page))
+    const teams = await this.teamsRepository.findManyByUserId(user.id, Number(page))
 
     const teamsResponse = teams.map((item) => {
       return {

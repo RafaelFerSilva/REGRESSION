@@ -41,7 +41,7 @@ export class InMemoryTeamsRepository implements TeamsRepository {
     return this.items.slice((page - 1) * 20, page * 20)
   }
 
-  async findManyByUserIdAll(userId: string, page?: number) {
+  async findManyByUserId(userId: string, page?: number) {
 
     if (page) {
       return this.items
