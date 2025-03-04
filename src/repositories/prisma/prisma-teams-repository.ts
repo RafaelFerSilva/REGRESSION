@@ -29,4 +29,9 @@ export class PrismaTeamsRepository implements TeamsRepository{
     return team
   }
 
+  async findAll(page: number) {
+    const teams = await prisma.team.findMany()
+    return teams.slice((page - 1) * 20, page * 20)
+  }
+
 }

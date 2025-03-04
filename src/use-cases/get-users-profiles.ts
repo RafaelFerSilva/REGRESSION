@@ -1,5 +1,4 @@
 import { UsersRepository } from "@/repositories/interfaces/users-repository";
-import { ResourceNotFoundError } from "./erros/resource-not-found-error";
 import { UserResponse } from "@/interfaces/user-interfaces";
 
 interface GetUsersProfilesUseCaseRequest {

@@ -1,5 +1,5 @@
 import { ResourceNotFoundError } from "@/use-cases/erros/resource-not-found-error";
-import { makeTeamUseCase } from "@/use-cases/factories/make-team-use-case";
+import { makeGetTeamUseCase } from "@/use-cases/factories/make-team-use-case";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { z } from "zod";
 
@@ -11,7 +11,7 @@ export async function getTeam(request: FastifyRequest, reply: FastifyReply) {
   const { teamId } = getTeamProfileParamsSchema .parse(request.params)
 
   try {
-    const getTeamProfileUseCase = makeTeamUseCase()
+    const getTeamProfileUseCase = makeGetTeamUseCase()
     const { team } = await getTeamProfileUseCase.execute({
       teamId
     })

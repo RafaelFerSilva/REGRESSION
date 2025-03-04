@@ -4,4 +4,5 @@ export interface TeamsRepository {
   create(data: Prisma.TeamUncheckedCreateInput): Promise<Team>
   findById(id: string): Promise<Team | null>
   findByName(name: string): Promise<Team | null>
+  findAll(page: number): Promise<Team[] | []>
 }

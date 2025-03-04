@@ -37,4 +37,8 @@ export class InMemoryTeamsRepository implements TeamsRepository {
     return team
   }
 
+  async findAll(page: number) {
+    return this.items.slice((page - 1) * 20, page * 20)
+  }
+
 }
