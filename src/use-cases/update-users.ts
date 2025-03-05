@@ -3,6 +3,7 @@ import { UsersRepository } from "@/repositories/interfaces/users-repository";
 import { UserNotExistError } from "./errors/user-not-exists-error";
 import { User } from "@prisma/client";
 import { EmailAlreadyExistError } from "./errors/email-already-exists-error";
+import { PasswordError } from "./errors/password-error";
 
 interface UpdateUserUseCaseRequest {
   name?: string,
@@ -28,7 +29,6 @@ export class UpdateUserUseCase {
   constructor(private usersRepository: UsersRepository) { }
 
   async execute(userId: string, data: UpdateUserUseCaseRequest): Promise<UpdateUserUseCaseResponse> {
-    let password_hash: string
     let updateData: UpdateUser = {
       name: "",
       email: "",
@@ -47,20 +47,24 @@ export class UpdateUserUseCase {
           throw new EmailAlreadyExistError()
         }
       }
+      updateData.email = data.email
     }
 
     if (data.password) {
-      password_hash = await hash(data.password, 6)
-      updateData.password_hash = password_hash
+      if(data.password.length < 6) {
+        throw new PasswordError()
+      }
+      updateData.password_hash = await hash(data.password, 6)
     }
 
     if (data.name) updateData.name = data.name
-    if (data.email) updateData.email = data.email
     if (data.rule) updateData.rule = data.rule
-    if (data.active) updateData.active = data.active
+    
+    if (data.active !== userById.active && data.active !== undefined) {
+      updateData.active = data.active
+    }
 
     const updatedUser = await this.usersRepository.update(userId, updateData)
-
     return {
       user: updatedUser,
     }

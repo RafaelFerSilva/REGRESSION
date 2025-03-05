@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-user-repository'
-import { UserAlreadyExistError } from './errors/user-already-exists-error'
 import { User } from '@prisma/client'
-import { hash } from 'bcryptjs'
+import { compare, hash } from 'bcryptjs'
 import { UpdateUserUseCase } from './update-users'
 import { randomUUID } from 'node:crypto'
 import { EmailAlreadyExistError } from './errors/email-already-exists-error'
+import { PasswordError } from './errors/password-error'
 
 let usersRepository: InMemoryUsersRepository
 let userToUpdate1: User
@@ -37,43 +37,69 @@ describe('Update User Use Case', () => {
     })
   })
 
+
+  it('should be able update user data', async () => {
+    const userToUpdate = {
+      name: 'Update user',
+      email: 'update@example.com',
+      password: '12345987',
+      rule: 'ADMIN',
+      active: false
+    }
+
+    const { user } = await sut.execute(userToUpdate1.id, userToUpdate)
+    expect(user.name).toEqual(userToUpdate.name)
+    expect(user.email).toEqual(userToUpdate.email)
+    expect(user.rule).toEqual(userToUpdate.rule)
+    expect(user.active).toEqual(userToUpdate.active)
+
+    const doesPasswordMatches = await compare(userToUpdate.password, user.password_hash)
+    expect(doesPasswordMatches).toBeTruthy()
+  })
+
   it('should be able update user name', async () => {
     const newName = 'Rafael Silva'
-    const { user } = await sut.execute(userToUpdate1.id, {name: newName})
+    const { user } = await sut.execute(userToUpdate1.id, { name: newName })
     expect(user.name).toEqual(newName)
     expect(user.email).toEqual(userToUpdate1.email)
   })
 
   it('should be able update user e-mail', async () => {
-    const newEmail = 'joao@joao.com'
-    const { user } = await sut.execute(userToUpdate2.id, {email: newEmail})
-    console.log(user)
+    const newEmail = 'joao@silva.com'
+    const { user } = await sut.execute(userToUpdate2.id, { email: newEmail })
     expect(user.email).toEqual(newEmail)
   })
 
   it('should not be able update user email to already exists email to another user', async () => {
     await expect(() =>
-      sut.execute(userToUpdate2.id, {email: userToUpdate1.email}),
+      sut.execute(userToUpdate2.id, { email: userToUpdate1.email }),
     ).rejects.toBeInstanceOf(EmailAlreadyExistError)
   })
 
-  it.skip('should hash user password upon registration', async () => {
-    const { user } = await sut.execute({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      password: '123456',
-      rule: 'QA',
-    })
+  it('should be able update user password', async () => {
+    const newPassword = '123457'
+    const { user } = await sut.execute(userToUpdate1.id, { password: newPassword })
+    const doesPasswordMatches = await compare(newPassword, user.password_hash)
+    expect(doesPasswordMatches).toBeTruthy()
+    expect(user.email).toEqual(userToUpdate1.email)
+  })
 
+  it('should not be able update password with less more than 6 digits', async () => {
     await expect(() =>
-      sut.execute({
-        name: 'John Doe',
-        email: 'johndoe@example.com',
-        password: '123456',
-        rule: 'QA',
-      }),
-    ).rejects.toBeInstanceOf(UserAlreadyExistError)
+      sut.execute(userToUpdate1.id, { password: '12345' }),
+    ).rejects.toBeInstanceOf(PasswordError)
+  })
 
+  it('should be able update user Rule', async () => {
+    const { user } = await sut.execute(userToUpdate1.id, { rule: 'ADMIN' })
+    expect(user.rule).toEqual('ADMIN')
+  })
 
+  it('should be able update user active status', async () => {
+    let user = await sut.execute(userToUpdate1.id, { active: false })
+    expect(user.user.active).toBe(false)
+
+    user = await sut.execute(userToUpdate1.id, { active: true })
+    expect(user.user.active).toBe(true)
   })
 })

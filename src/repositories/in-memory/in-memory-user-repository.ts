@@ -59,9 +59,8 @@ export class InMemoryUsersRepository implements UsersRepository {
     if (data.name) this.items[index].name = data.name
     if (data.email) this.items[index].email = data.email
     if (data.rule) this.items[index].rule = data.rule
-    if (data.active) this.items[index].active = data.active
+    if (data.active !== undefined) this.items[index].active = data.active
     if (data.password_hash) this.items[index].password_hash = data.password_hash
-
     return this.items[index]
   }
 }
