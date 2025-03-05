@@ -19,6 +19,7 @@ model User {
   email         String   @unique
   password_hash String
   created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
   rule          String
   active        Boolean
 
@@ -44,6 +45,7 @@ model TestCase {
   expected_result String
   observation     String?
   created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
@@ -59,6 +61,7 @@ model Feature {
   name        String   @unique
   description String
   created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
 
   team     Team       @relation(fields: [teamId], references: [id])
   teamId   String
@@ -72,6 +75,7 @@ model Team {
   id         String   @id @default(uuid())
   name       String   @unique
   created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   user    User      @relation(fields: [userId], references: [id])
   userId  String

@@ -6,6 +6,7 @@ import { UpdateUserUseCase } from './update-users'
 import { randomUUID } from 'node:crypto'
 import { EmailAlreadyExistError } from './errors/email-already-exists-error'
 import { PasswordError } from './errors/password-error'
+import { UserNotExistError } from './errors/user-not-exists-error'
 
 let usersRepository: InMemoryUsersRepository
 let userToUpdate1: User
@@ -57,6 +58,20 @@ describe('Update User Use Case', () => {
     expect(doesPasswordMatches).toBeTruthy()
   })
 
+  it('should not be able update non existing user', async () => {
+    const userToUpdate = {
+      name: 'Update user',
+      email: 'update@example.com',
+      password: '12345987',
+      rule: 'ADMIN',
+      active: false
+    }
+
+    await expect(() =>
+      sut.execute('non-existing-user', userToUpdate),
+    ).rejects.toBeInstanceOf(UserNotExistError)
+  })
+
   it('should be able update user name', async () => {
     const newName = 'Rafael Silva'
     const { user } = await sut.execute(userToUpdate1.id, { name: newName })
@@ -65,7 +80,7 @@ describe('Update User Use Case', () => {
   })
 
   it('should be able update user e-mail', async () => {
-    const newEmail = 'joao@silva.com'
+    const newEmail = 'joaosilva@silva.com'
     const { user } = await sut.execute(userToUpdate2.id, { email: newEmail })
     expect(user.email).toEqual(newEmail)
   })
