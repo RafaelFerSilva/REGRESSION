@@ -6,14 +6,15 @@ export class InMemoryUsersRepository implements UsersRepository {
   public items: User[] = []
 
   async create(data: Prisma.UserCreateInput) {
-    const user = {
+    const user: User = {
       id: `${data.id}`,
       name: data.name,
       email: data.email,
       password_hash: data.password_hash,
       rule: data.rule,
       active: data.active,
-      created_at: new Date()
+      created_at: new Date(),
+      updated_at: new Date()
     }
 
     this.items.push(user)
