@@ -8,13 +8,13 @@ import { UserNotFoundError } from "./errors/user-not-found-error";
 import { TeamAlreadyExistError } from "./errors/team-already-exists-error";
 import { randomUUID } from 'node:crypto'
 
-let teamsRepository: InMemoryTeamsRepository
-let sut: CreateTeamUseCase
-
-let usersRepository: InMemoryUsersRepository
-let user: User
-
 describe('Team Use Case', () => {
+  let teamsRepository: InMemoryTeamsRepository
+  let sut: CreateTeamUseCase
+
+  let usersRepository: InMemoryUsersRepository
+  let user: User
+
   beforeEach(async () => {
     usersRepository = new InMemoryUsersRepository()
     teamsRepository = new InMemoryTeamsRepository()
