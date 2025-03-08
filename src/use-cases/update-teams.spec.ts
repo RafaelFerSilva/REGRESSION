@@ -1,35 +1,41 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { Team, User } from '@prisma/client'
-import { hash } from 'bcryptjs'
-import { randomUUID } from 'node:crypto'
-import { InMemoryTeamsRepository } from '@/repositories/in-memory/in-memory-team-repository'
-import { UpdateTeamsUseCase } from './update-teams'
 import { TeamNotFoundError } from './errors/team-not-found-error'
-import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-user-repository'
+
+// Importar as factories e helpers
+import { makeUser } from '@/use-cases/factories/user-factory'
+import { makeTeam } from '@/use-cases/factories/team-factory'
+import { setupTeamRepositoryAndUseCase, setupUserRepositoryAndUseCase } from '@/use-cases/helpers/setup-repositories'
+import { assertTeamProperties } from './helpers/test-assertions'
 
 describe('Update Team Use Case', () => {
-  let sut: UpdateTeamsUseCase
-  let teamsRepository: InMemoryTeamsRepository
-  let usersRepository: InMemoryUsersRepository
-  let teamToUpdate1: Team
+  let teamsRepository: ReturnType<typeof setupTeamRepositoryAndUseCase>['teamsRepository']
+  let usersRepository: ReturnType<typeof setupUserRepositoryAndUseCase>['usersRepository']
+  let sut: ReturnType<typeof setupTeamRepositoryAndUseCase>['updateTeamsUseCase']
   let userTeam: User
+  let teamToUpdate1: Team
+  let teamToUpdate2: Team
 
   beforeEach(async () => {
-    teamsRepository = new InMemoryTeamsRepository()
-    usersRepository = new InMemoryUsersRepository()
-    sut = new UpdateTeamsUseCase(teamsRepository)
+    // Usar os helpers para configurar repositórios e caso de uso
+    const teamSetup = setupTeamRepositoryAndUseCase()
+    teamsRepository = teamSetup.teamsRepository
+    sut = teamSetup.updateTeamsUseCase
+    
+    const userSetup = setupUserRepositoryAndUseCase()
+    usersRepository = userSetup.usersRepository
 
-    userTeam = await usersRepository.create({
-      id: randomUUID(),
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      password_hash: await hash('123456', 6),
-      rule: 'QA'
+    // Criar usuário de teste usando a factory
+    userTeam = await makeUser(usersRepository)
+
+    // Criar equipes de teste usando a factory
+    teamToUpdate1 = await makeTeam(teamsRepository, {
+      name: 'Team 1',
+      userId: userTeam.id
     })
 
-    teamToUpdate1 = await teamsRepository.create({
-      id: randomUUID(),
-      name: 'Team 1',
+    teamToUpdate2 = await makeTeam(teamsRepository, {
+      name: 'Team 2',
       userId: userTeam.id
     })
   })
@@ -51,10 +57,9 @@ describe('Update Team Use Case', () => {
 
   it('should return the same team if no data to update is provided', async () => {
     // Arrange
-    const updateTeam = await teamsRepository.create({
-      id: randomUUID(),
+    const updateTeam = await makeTeam(teamsRepository, { 
       name: 'Team',
-      userId: userTeam.id
+      userId: userTeam.id 
     })
     
     // Act
@@ -87,33 +92,36 @@ describe('Update Team Use Case', () => {
   it('should be able to update only the team name', async () => {
     // Arrange
     const newName = 'Team Silva'
-    const originalActive = teamToUpdate1.active
     
     // Act
     const { team } = await sut.execute(teamToUpdate1.id, { name: newName })
     
     // Assert
-    expect(team.name).toEqual(newName)
-    expect(team.active).toEqual(originalActive) // Garante que outros campos não foram alterados
+    assertTeamProperties(team, {
+      name: newName,
+      active: teamToUpdate1.active
+    })
   })
 
   it('should be able to update only the team active status', async () => {
-    // Arrange
-    const originalName = teamToUpdate1.name
     
     // Act - Desativando o time
     const result1 = await sut.execute(teamToUpdate1.id, { active: false })
     
     // Assert
-    expect(result1.team.active).toBe(false)
-    expect(result1.team.name).toEqual(originalName) // Garante que o nome não foi alterado
+    assertTeamProperties(result1.team, {
+      name: teamToUpdate1.name,
+      active: false
+    })
     
     // Act - Reativando o time
     const result2 = await sut.execute(teamToUpdate1.id, { active: true })
     
     // Assert
-    expect(result2.team.active).toBe(true)
-    expect(result2.team.name).toEqual(originalName) // Garante que o nome não foi alterado
+    assertTeamProperties(result1.team, {
+      name: teamToUpdate1.name,
+      active: true
+    })
   })
 
   it('should validate team id before updating', async () => {

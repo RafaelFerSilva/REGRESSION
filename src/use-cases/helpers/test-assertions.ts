@@ -1,5 +1,5 @@
 import { expect } from 'vitest'
-import { User } from '@prisma/client'
+import { Team, User } from '@prisma/client'
 import { compare } from 'bcryptjs'
 
 export function assertUserProperties(
@@ -31,4 +31,19 @@ export async function assertPasswordMatches(
 ): Promise<void> {
   const doesPasswordMatch = await compare(plainTextPassword, passwordHash)
   expect(doesPasswordMatch).toBeTruthy()
+}
+
+export function assertTeamProperties(
+  user: Team,
+  expected: {
+    name?: string
+    active?: boolean
+  }
+) {
+  if (expected.name) {
+    expect(user.name).toEqual(expected.name)
+  }
+  if (expected.active !== undefined) {
+    expect(user.active).toEqual(expected.active)
+  }
 }
