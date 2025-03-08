@@ -58,6 +58,23 @@ describe('Update User Use Case', () => {
     expect(doesPasswordMatches).toBeTruthy()
   })
 
+  it('should be return same user if no data to update', async () => {
+    const userTest = await usersRepository.create({
+      id: randomUUID(),
+      name: 'John Doe',
+      email: 'johndoe@example.com',
+      password_hash: await hash('123456', 6),
+      rule: 'QA',
+      active: true
+    })
+    const { user } = await sut.execute(userTest.id, userTest)
+    expect(user.name).toEqual(userTest.name)
+    expect(user.email).toEqual(userTest.email)
+    expect(user.rule).toEqual(userTest.rule)
+    expect(user.active).toEqual(userTest.active)
+    expect(userTest.password_hash).toEqual(user.password_hash)
+  })
+
   it('should not be able update non existing user', async () => {
     const userToUpdate = {
       name: 'Update user',

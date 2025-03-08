@@ -34,14 +34,14 @@ export class UpdateUserUseCase {
       updateData.email = data.email;
     }
 
-    if (data.password) {
+    if (data.password && data.password !== userById.password_hash) {
       if (data.password.length < 6) throw new PasswordError();
       updateData.password_hash = await hash(data.password, 6);
     }
 
-    if (data.name) updateData.name = data.name;
-    if (data.rule) updateData.rule = data.rule;
-    if (typeof data.active === "boolean" && data.active !== userById.active) {
+    if (data.name && data.name !== userById.name) updateData.name = data.name;
+    if (data.rule && data.rule !== userById.rule) updateData.rule = data.rule;
+    if (typeof data.active === "boolean" && data.active !== userById.active && data.active !== undefined && data.active !== null) {
       updateData.active = data.active;
     }
 
