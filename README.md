@@ -10,6 +10,8 @@
 
 - [X] Criar tabela de log que registre as alterações nas tabelas
 
+- [] Utilizar Helpers e factories nos testes
+
 - [] Criar features
 - [] Listar features
 - [] Atualizar de features

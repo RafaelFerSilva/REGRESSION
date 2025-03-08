@@ -17,6 +17,7 @@ export default defineConfig({
         '**/users.repository.ts',
         '**/interfaces/**',
         '**/factories/**',
+        '**/helpers/**',
         ...coverageConfigDefaults.exclude,
       ],
     },

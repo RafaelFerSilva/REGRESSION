@@ -20,9 +20,11 @@ export class GetTeamUseCase {
     if(!team) throw new TeamNotFoundError()
 
     const teamResponse = {
+      id: team.id,
       name: team.name,
       created_at: team.created_at,
-      userId: team.userId
+      userId: team.userId,
+      active: team.active,
     }
 
     return { 

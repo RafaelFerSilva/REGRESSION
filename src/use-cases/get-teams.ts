@@ -19,9 +19,11 @@ export class GetTeamsUseCase {
 
     const teamsResponse = team.map((item) => {
       return {
+        id: item.id,
         name: item.name,
         created_at: item.created_at,
-        userId: item.userId
+        userId: item.userId,
+        active: item.active
       }
     })
 

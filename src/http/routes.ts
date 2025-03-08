@@ -9,6 +9,7 @@ import { getTeams } from "./controllers/get_teams";
 import { getUserTeams } from "./controllers/get_user_teams";
 import { getUsersByRules } from "./controllers/get_users_by_rule";
 import { updateUser } from "./controllers/update_users";
+import { updateTeams } from "./controllers/update_teams";
 
 export async function appRoutes(app: FastifyInstance) {
   app.post('/users', register)
@@ -21,4 +22,5 @@ export async function appRoutes(app: FastifyInstance) {
   app.patch('/update_user', updateUser)
   app.post('/sessions', authenticate)
   app.post('/teams', teams)
+  app.patch('/update_team', updateTeams)
 }
