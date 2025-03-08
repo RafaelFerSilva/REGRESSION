@@ -10,6 +10,8 @@
 
 
 
+- [X] Criar tabela de log
+
 
 - [] Criar features
 - [] Listar features

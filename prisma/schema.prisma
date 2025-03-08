@@ -81,3 +81,14 @@ model Team {
   userId  String
   Feature Feature[]
 }
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  table_name String
+  record_id  String
+  action     String
+  old_data   Json?
+  new_data   Json?
+  changed_by String?
+  created_at DateTime @default(now())
+}
