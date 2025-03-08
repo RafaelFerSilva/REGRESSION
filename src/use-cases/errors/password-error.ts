@@ -1,5 +1,5 @@
 export class PasswordError extends Error {
   constructor() {
-    super('Password Error: Check password rules')
+    super('Password must be at least 6 characters.')
   }
 }

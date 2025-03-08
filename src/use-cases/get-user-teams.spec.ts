@@ -5,7 +5,7 @@ import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-user
 import { User } from "@prisma/client"
 import { GetUserTeamsUseCase } from "./get-user-teams"
 import { randomUUID } from "node:crypto"
-import { UserNotExistError } from "./errors/user-not-exists-error"
+import { UserNotFoundError } from "./errors/user-not-found-error"
 
 let teamsRepository: InMemoryTeamsRepository
 let sut: GetUserTeamsUseCase
@@ -111,7 +111,7 @@ describe('Get User Teams Use Case', () => {
         userId: 'non-existing-user',
         page: 1
       }),
-    ).rejects.toBeInstanceOf(UserNotExistError)
+    ).rejects.toBeInstanceOf(UserNotFoundError)
   })
 })
 

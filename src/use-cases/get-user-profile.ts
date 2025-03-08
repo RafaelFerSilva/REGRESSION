@@ -1,6 +1,6 @@
 import { UsersRepository } from "@/repositories/interfaces/users-repository";
 import { UserResponse } from "@/interfaces/user-interfaces";
-import { UserNotExistError } from "./errors/user-not-exists-error";
+import { UserNotFoundError } from "./errors/user-not-found-error";
 
 interface GetUserProfileUseCaseRequest {
   userId: string
@@ -17,7 +17,7 @@ export class GetUserProfileUseCase {
     userId,
   }: GetUserProfileUseCaseRequest): Promise<GetUserProfileUseCaseResponse> {
     const user = await this.userRepository.findById(userId)
-    if(!user) throw new UserNotExistError()
+    if(!user) throw new UserNotFoundError()
 
     const userResponse = {
       name: user.name,

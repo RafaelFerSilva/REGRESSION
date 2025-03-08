@@ -1,6 +1,6 @@
 import { hash } from "bcryptjs";
 import { UsersRepository } from "@/repositories/interfaces/users-repository";
-import { UserNotExistError } from "./errors/user-not-exists-error";
+import { UserNotFoundError } from "./errors/user-not-found-error";
 import { EmailAlreadyExistError } from "./errors/email-already-exists-error";
 import { PasswordError } from "./errors/password-error";
 import { User } from "@prisma/client";
@@ -22,7 +22,7 @@ export class UpdateUserUseCase {
 
   async execute(userId: string, data: UpdateUserUseCaseRequest): Promise<UpdateUserUseCaseResponse> {
     const userById = await this.usersRepository.findById(userId);
-    if (!userById) throw new UserNotExistError();
+    if (!userById) throw new UserNotFoundError();
 
     const updateData: Partial<User> = {};
 

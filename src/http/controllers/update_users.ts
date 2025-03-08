@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import { z } from "zod"
 import { makeUpdateUserUseCase } from "@/use-cases/factories/make-update-user-use-case"
-import { UserNotExistError } from "@/use-cases/errors/user-not-exists-error"
+import { UserNotFoundError } from "@/use-cases/errors/user-not-found-error"
 import { EmailAlreadyExistError } from "@/use-cases/errors/email-already-exists-error"
 import { PasswordError } from "@/use-cases/errors/password-error"
 
@@ -21,7 +21,7 @@ export async function updateUser(request: FastifyRequest, reply: FastifyReply) {
     const updateUserUseCase = makeUpdateUserUseCase()
     await updateUserUseCase.execute(id, updateData)
   } catch (error) {
-    if (error instanceof UserNotExistError) return reply.status(400).send({ message: error.message })
+    if (error instanceof UserNotFoundError) return reply.status(400).send({ message: error.message })
     if (error instanceof EmailAlreadyExistError) return reply.status(409).send({ message: error.message })
     if (error instanceof PasswordError) return reply.status(400).send({ message: error.message })
 

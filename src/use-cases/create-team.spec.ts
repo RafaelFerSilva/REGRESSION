@@ -4,7 +4,7 @@ import { CreateTeamUseCase } from "./create-teams";
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-user-repository";
 import { hash } from "bcryptjs";
 import { User } from "@prisma/client";
-import { UserNotExistError } from "./errors/user-not-exists-error";
+import { UserNotFoundError } from "./errors/user-not-found-error";
 import { TeamAlreadyExistError } from "./errors/team-already-exists-error";
 import { randomUUID } from 'node:crypto'
 
@@ -42,7 +42,7 @@ describe('Team Use Case', () => {
         name: `Team ${randomUUID()}`,
         userId: 'no-existing-user'
       })
-    ).rejects.toBeInstanceOf(UserNotExistError)
+    ).rejects.toBeInstanceOf(UserNotFoundError)
   })
 
   it('should not be able to create a new team with empty user id', async () => {
@@ -51,7 +51,7 @@ describe('Team Use Case', () => {
         name: `Team ${randomUUID()}`,
         userId: ''
       })
-    ).rejects.toBeInstanceOf(UserNotExistError)
+    ).rejects.toBeInstanceOf(UserNotFoundError)
   })
 
   it('should not be able to create a new team with already existing name', async () => {

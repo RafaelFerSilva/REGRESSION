@@ -5,7 +5,7 @@ import { InMemoryTeamsRepository } from "@/repositories/in-memory/in-memory-team
 import { GetTeamUseCase } from "./get-team"
 import { randomUUID } from "node:crypto"
 import { User } from "@prisma/client"
-import { TeamNotExistError } from "./errors/team-not-exists-error"
+import { TeamNotFoundError } from "./errors/team-not-found-error"
 
 let teamsRepository: InMemoryTeamsRepository
 let sut: GetTeamUseCase
@@ -43,7 +43,7 @@ describe('Get Team Use Case', () => {
   it('should not be able to get team with wrong id', async () => {
     await expect(() =>
       sut.execute({ teamId: 'no-existing.id' }),
-    ).rejects.toBeInstanceOf(TeamNotExistError)
+    ).rejects.toBeInstanceOf(TeamNotFoundError)
   })
 })
 

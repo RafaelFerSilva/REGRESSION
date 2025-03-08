@@ -1,4 +1,4 @@
-import { TeamNotExistError } from "@/use-cases/errors/team-not-exists-error";
+import { TeamNotFoundError } from "@/use-cases/errors/team-not-found-error";
 import { makeGetTeamUseCase } from "@/use-cases/factories/make-team-use-case";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { z } from "zod";
@@ -17,7 +17,7 @@ export async function getTeam(request: FastifyRequest, reply: FastifyReply) {
     })
     return reply.status(200).send({ team });
   } catch (error) {
-    if (error instanceof TeamNotExistError) return reply.status(404).send({ message: error.message })
+    if (error instanceof TeamNotFoundError) return reply.status(404).send({ message: error.message })
 
     throw error
   }

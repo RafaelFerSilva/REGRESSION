@@ -4,6 +4,7 @@ import { prisma } from "lib/prisma";
 
 export class PrismaTeamsRepository implements TeamsRepository {
 
+
   async create(data: Prisma.TeamUncheckedCreateInput): Promise<Team> {
     const team = await prisma.team.create({ data })
     return team
@@ -39,10 +40,26 @@ export class PrismaTeamsRepository implements TeamsRepository {
       {
         where: { userId, }
       })
-    
-    if(page)  return teams.slice((page - 1) * 20, page * 20)
-    
+
+    if (page) return teams.slice((page - 1) * 20, page * 20)
+
     return teams
+  }
+
+  async update(teamId: string, data: Partial<Prisma.TeamUncheckedCreateInput>) {
+    const updatedTeam = await prisma.team.update(
+      {
+        where: {
+          id: teamId
+        },
+        data: {
+          name: data.name,
+          active: data.active
+        }
+      }
+    )
+
+    return updatedTeam
   }
 
 }

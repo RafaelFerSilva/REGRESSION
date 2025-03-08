@@ -1,4 +1,4 @@
-import { UserNotExistError } from "@/use-cases/errors/user-not-exists-error";
+import { UserNotFoundError } from "@/use-cases/errors/user-not-found-error";
 import { makeGetUserProfileUseCase } from "@/use-cases/factories/make-get-user-profile-use-case";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { z } from "zod";
@@ -17,7 +17,7 @@ export async function getUserProfile(request: FastifyRequest, reply: FastifyRepl
     })
     return reply.status(200).send({ user });
   } catch (error) {
-    if (error instanceof UserNotExistError) return reply.status(404).send({ message: error.message })
+    if (error instanceof UserNotFoundError) return reply.status(404).send({ message: error.message })
 
     throw error
   }

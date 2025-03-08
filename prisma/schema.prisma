@@ -21,7 +21,7 @@ model User {
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
   rule          String
-  active        Boolean
+  active        Boolean  @default(true)
 
   testsCases TestCase[]
   Team       Team[]
@@ -34,7 +34,7 @@ model TestCase {
   id              String   @id @default(uuid())
   title           String   @unique
   description     String
-  active          Boolean
+  active          Boolean  @default(true)
   criticality     String?
   priority        String?
   severity        String?
@@ -62,6 +62,7 @@ model Feature {
   description String
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+  active      Boolean  @default(true)
 
   team     Team       @relation(fields: [teamId], references: [id])
   teamId   String
@@ -76,6 +77,7 @@ model Team {
   name       String   @unique
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  active     Boolean  @default(true)
 
   user    User      @relation(fields: [userId], references: [id])
   userId  String

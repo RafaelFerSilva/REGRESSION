@@ -3,14 +3,17 @@ import { TeamsRepository } from "../interfaces/teams-repository";
 
 export class InMemoryTeamsRepository implements TeamsRepository {
   
+  
   public items: Team[] = []
 
   async create(data: Prisma.TeamUncheckedCreateInput): Promise<Team> {
-    const team = {
+    const team: Team = {
       id: `${data.id}`,
       name: data.name,
       created_at: new Date(),
-      userId: data.userId
+      userId: data.userId,
+      updated_at: new Date(),
+      active: data.active ?? true
     }
 
     this.items.push(team)
@@ -52,4 +55,10 @@ export class InMemoryTeamsRepository implements TeamsRepository {
     return this.items.filter((item) => item.userId === userId)
   }
 
+  async update(teamId: string, data: Prisma.TeamUncheckedCreateInput) {
+    const index = this.items.findIndex((item) => item.id == teamId)
+    if (data.name) this.items[index].name = data.name
+    if (data.active !== undefined) this.items[index].active = data.active
+    return this.items[index]
+  }
 }

@@ -1,6 +1,6 @@
 import { TeamResponse } from "@/interfaces/team-interfaces";
 import { TeamsRepository } from "@/repositories/interfaces/teams-repository";
-import { TeamNotExistError } from "./errors/team-not-exists-error";
+import { TeamNotFoundError } from "./errors/team-not-found-error";
 
 interface GetTeamUseCaseRequest {
   teamId: string
@@ -17,7 +17,7 @@ export class GetTeamUseCase {
     teamId,
   }: GetTeamUseCaseRequest): Promise<GetTeamUseCaseResponse> {
     const team = await this.teamsRepository.findById(teamId)
-    if(!team) throw new TeamNotExistError()
+    if(!team) throw new TeamNotFoundError()
 
     const teamResponse = {
       name: team.name,
