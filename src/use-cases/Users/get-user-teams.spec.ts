@@ -2,8 +2,8 @@ import { beforeEach, describe, expect, it } from "vitest"
 import { User } from "@prisma/client"
 import { UserNotFoundError } from "../errors/user-not-found-error"
 import { setupTeamRepositoryAndUseCase } from "../helpers/setup-repositories"
-import { makeUser } from "../factories/user-factory"
-import { makeTeam } from "../factories/team-factory"
+import { makeUser } from "../factories/User/make-user-test"
+import { makeTeam } from "../factories/Team/make-team-test"
 
 describe('Get User Teams Use Case', () => {
   let usersRepository: ReturnType<typeof setupTeamRepositoryAndUseCase>['usersRepository']

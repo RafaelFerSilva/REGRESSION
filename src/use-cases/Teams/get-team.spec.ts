@@ -3,8 +3,8 @@ import { beforeEach, describe, expect, it } from "vitest"
 import { User } from "@prisma/client"
 import { TeamNotFoundError } from "../errors/team-not-found-error"
 import { setupTeamRepositoryAndUseCase, setupUserRepositoryAndUseCase } from "../helpers/setup-repositories"
-import { makeUser } from "../factories/user-factory"
-import { makeTeam } from "../factories/team-factory"
+import { makeUser } from "../factories/User/make-user-test"
+import { makeTeam } from "../factories/Team/make-team-test"
 import { assertTeamProperties } from "../helpers/test-assertions"
 
 describe('Get Team Use Case', () => {

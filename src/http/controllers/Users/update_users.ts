@@ -1,9 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import { z } from "zod"
-import { makeUpdateUserUseCase } from "@/use-cases/factories/make-update-user-use-case"
 import { UserNotFoundError } from "@/use-cases/errors/user-not-found-error"
 import { EmailAlreadyExistError } from "@/use-cases/errors/email-already-exists-error"
 import { PasswordError } from "@/use-cases/errors/password-error"
+import { makeUpdateUserUseCase } from "@/use-cases/factories/User/make-update-user-use-case"
 
 export async function updateUser(request: FastifyRequest, reply: FastifyReply) {
   const updateUserSchema = z.object({

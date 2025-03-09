@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from "vitest"
 import { hash } from "bcryptjs"
 import { GetUsersProfilesUseCase } from "./get-users-profiles"
 import { setupUserRepositoryAndUseCase } from "../helpers/setup-repositories"
-import { makeUser } from "../factories/user-factory"
+import { makeUser } from "../factories/User/make-user-test"
 
 describe('Get All Users Profiles Use Case', () => {
   let usersRepository: ReturnType<typeof setupUserRepositoryAndUseCase>['usersRepository']

@@ -7,7 +7,7 @@ import { UserNotFoundError } from '../errors/user-not-found-error'
 
 
 // Importar as factories e helpers
-import { makeUser } from '@/use-cases/factories/user-factory'
+import { makeUser } from '@/use-cases/factories/User/make-user-test'
 import { assertUserProperties, assertPasswordMatches } from '@/use-cases/helpers/test-assertions'
 import { setupUserRepositoryAndUseCase } from '@/use-cases/helpers/setup-repositories'
 

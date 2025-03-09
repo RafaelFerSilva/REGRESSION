@@ -1,5 +1,5 @@
 import { TeamNotFoundError } from "@/use-cases/errors/team-not-found-error";
-import { makeGetTeamUseCase } from "@/use-cases/factories/make-team-use-case";
+import { makeGetTeamUseCase } from "@/use-cases/factories/Team/make-team-use-case";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { z } from "zod";
 

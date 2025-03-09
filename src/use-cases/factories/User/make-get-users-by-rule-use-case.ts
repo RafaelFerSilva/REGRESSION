@@ -1,5 +1,5 @@
 import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository'
-import { GetUsersByRuleUseCase } from '../Users/get-users-by-rule'
+import { GetUsersByRuleUseCase } from '../../Users/get-users-by-rule'
 
 export function makeGetUsersByRulesUseCase() {
   const usersRepository = new PrismaUsersRepository()

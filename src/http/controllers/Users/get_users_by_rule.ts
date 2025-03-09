@@ -1,4 +1,4 @@
-import { makeGetUsersByRulesUseCase } from "@/use-cases/factories/make-get-users-by-rule-use-case";
+import { makeGetUsersByRulesUseCase } from "@/use-cases/factories/User/make-get-users-by-rule-use-case";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { z } from "zod";
 

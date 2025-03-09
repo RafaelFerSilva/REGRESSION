@@ -6,7 +6,7 @@ import { randomUUID } from 'node:crypto'
 
 import { setupTeamRepositoryAndUseCase, setupUserRepositoryAndUseCase } from '@/use-cases/helpers/setup-repositories'
 import { assertTeamProperties } from '../helpers/test-assertions'
-import { makeUser } from "../factories/user-factory";
+import { makeUser } from "../factories/User/make-user-test";
 
 describe('Team Use Case', () => {
   let usersRepository: ReturnType<typeof setupTeamRepositoryAndUseCase>['usersRepository']
