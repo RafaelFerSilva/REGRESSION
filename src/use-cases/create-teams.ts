@@ -19,7 +19,7 @@ export class CreateTeamUseCase {
 
   async execute({ name, userId }: TeamUseCaseRequest): Promise<TeamUseCaseResponse> {
     const user = await this.userRepository.findById(userId)
-    if (!user) throw new UserNotFoundError()
+    if (!user || user === null) throw new UserNotFoundError()
     
     const teamWithSameName = await this.teamsRepository.findByName(name)
     if (teamWithSameName) throw new TeamAlreadyExistError()

@@ -34,16 +34,16 @@ export async function assertPasswordMatches(
 }
 
 export function assertTeamProperties(
-  user: Team,
+  team: Team | null,
   expected: {
     name?: string
     active?: boolean
   }
 ) {
   if (expected.name) {
-    expect(user.name).toEqual(expected.name)
+    expect(team?.name).toEqual(expected.name)
   }
   if (expected.active !== undefined) {
-    expect(user.active).toEqual(expected.active)
+    expect(team?.active).toEqual(expected.active)
   }
 }

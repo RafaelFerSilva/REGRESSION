@@ -47,4 +47,15 @@ describe('Register Use Case', () => {
       sut.execute(createData),
     ).rejects.toBeInstanceOf(UserAlreadyExistError)
   })
+
+  it('should create user with active=true when not specified', async () => {
+    const { user } = await sut.execute({
+      name: 'Jane Doe',
+      email: 'jane@example.com',
+      password: '123456',
+      rule: 'USER'
+    });
+    
+    expect(user.active).toBe(true);
+  });
 })

@@ -3,6 +3,7 @@ import { InMemoryTeamsRepository } from '@/repositories/in-memory/in-memory-team
 import { UpdateUserUseCase } from '@/use-cases/update-users'
 import { UpdateTeamsUseCase } from '@/use-cases/update-teams'
 import { CreateUserUseCase } from '../create-users'
+import { CreateTeamUseCase } from '../create-teams'
 
 export function setupUserRepositoryAndUseCase() {
   const usersRepository = new InMemoryUsersRepository()
@@ -18,10 +19,14 @@ export function setupUserRepositoryAndUseCase() {
 
 export function setupTeamRepositoryAndUseCase() {
   const teamsRepository = new InMemoryTeamsRepository()
+  const usersRepository = new InMemoryUsersRepository()
   const updateTeamsUseCase = new UpdateTeamsUseCase(teamsRepository)
+  const createTeamsUseCase = new CreateTeamUseCase(teamsRepository, usersRepository)
   
   return {
     teamsRepository,
     updateTeamsUseCase,
+    createTeamsUseCase,
+    usersRepository
   }
 }

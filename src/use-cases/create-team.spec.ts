@@ -1,39 +1,38 @@
-import { InMemoryTeamsRepository } from "@/repositories/in-memory/in-memory-team-repository";
 import { beforeEach, describe, expect, it } from "vitest";
-import { CreateTeamUseCase } from "./create-teams";
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-user-repository";
-import { hash } from "bcryptjs";
 import { User } from "@prisma/client";
 import { UserNotFoundError } from "./errors/user-not-found-error";
 import { TeamAlreadyExistError } from "./errors/team-already-exists-error";
 import { randomUUID } from 'node:crypto'
 
-describe('Team Use Case', () => {
-  let teamsRepository: InMemoryTeamsRepository
-  let sut: CreateTeamUseCase
+import { setupTeamRepositoryAndUseCase, setupUserRepositoryAndUseCase } from '@/use-cases/helpers/setup-repositories'
+import { assertTeamProperties } from './helpers/test-assertions'
+import { makeUser } from "./factories/user-factory";
 
-  let usersRepository: InMemoryUsersRepository
+describe('Team Use Case', () => {
+  let usersRepository: ReturnType<typeof setupTeamRepositoryAndUseCase>['usersRepository']
+  let teamsRepository: ReturnType<typeof setupTeamRepositoryAndUseCase>['teamsRepository']
+  let sut: ReturnType<typeof setupTeamRepositoryAndUseCase>['createTeamsUseCase']
   let user: User
 
   beforeEach(async () => {
-    usersRepository = new InMemoryUsersRepository()
-    teamsRepository = new InMemoryTeamsRepository()
-    sut = new CreateTeamUseCase(teamsRepository, usersRepository)
+    const teamSetup = setupTeamRepositoryAndUseCase()
+    teamsRepository = teamSetup.teamsRepository
+    sut = teamSetup.createTeamsUseCase
 
-    user = await usersRepository.create({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      password_hash: await hash('123456', 6),
-      rule: 'QA',
-      active: true
-    })
+    usersRepository = teamSetup.usersRepository
+
+    // Criar usuário de teste usando a factory
+    user = await makeUser(usersRepository)
   })
 
   it('should be able to create a new team', async () => {
-    const { team } = await sut.execute({
+    const newTeam = {
       name: `Team ${randomUUID()}`,
       userId: user.id
-    })
+    }
+    const { team } = await sut.execute(newTeam)
+
+    assertTeamProperties(team, newTeam)
   })
 
   it('should not be able to create a new team with not existing user', async () => {
@@ -55,7 +54,7 @@ describe('Team Use Case', () => {
   })
 
   it('should not be able to create a new team with already existing name', async () => {
-    const teamName = 'Team 1'
+    const teamName = `Team ${randomUUID()}`
     await sut.execute({
       name: teamName,
       userId: user.id
