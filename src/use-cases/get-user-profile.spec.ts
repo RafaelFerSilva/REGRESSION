@@ -3,31 +3,31 @@ import { GetUserProfileUseCase } from "./get-user-profile"
 import { beforeEach, describe, expect, it } from "vitest"
 import { hash } from "bcryptjs"
 import { UserNotFoundError } from "./errors/user-not-found-error"
-
-let usersRepository: InMemoryUsersRepository
-let sut: GetUserProfileUseCase
+import { setupUserRepositoryAndUseCase } from "./helpers/setup-repositories"
+import { makeUser } from "./factories/user-factory"
+import { assertUserProperties } from "./helpers/test-assertions"
 
 describe('Get User Profile Use Case', () => {
+  let usersRepository: ReturnType<typeof setupUserRepositoryAndUseCase>['usersRepository']
+  let sut: ReturnType<typeof setupUserRepositoryAndUseCase>['getUserProfileUseCase']
+
   beforeEach(() => {
-    usersRepository = new InMemoryUsersRepository()
-    sut = new GetUserProfileUseCase(usersRepository)
+    const userSetup = setupUserRepositoryAndUseCase()
+    usersRepository = userSetup.usersRepository
+    sut = userSetup.getUserProfileUseCase
   })
 
   it('should be able get user profile', async () => {
-    const createdUser = await usersRepository.create({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      password_hash: await hash('123456', 6),
-      rule: 'QA',
-      active: true
-    })
+    // Arrange
+    const createdUser = await makeUser(usersRepository)
 
+    // Act
     const { user } = await sut.execute({
       userId: createdUser.id
     })
 
-    expect(user.name).toEqual(createdUser.name)
-    expect(user.email).toEqual(createdUser.email)
+    // Assert
+    assertUserProperties(user, createdUser)
   })
 
   it('should not be able to get user profile with wrong id', async () => {

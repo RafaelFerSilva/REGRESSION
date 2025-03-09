@@ -7,12 +7,11 @@ import { makeUser } from "./factories/user-factory"
 import { makeTeam } from "./factories/team-factory"
 import { assertTeamProperties } from "./helpers/test-assertions"
 
-let user: User
-
 describe('Get Team Use Case', () => {
   let teamsRepository: ReturnType<typeof setupTeamRepositoryAndUseCase>['teamsRepository']
   let usersRepository: ReturnType<typeof setupUserRepositoryAndUseCase>['usersRepository']
   let sut: ReturnType<typeof setupTeamRepositoryAndUseCase>['getTeamUseCase']
+  let user: User
 
   beforeEach(async () => {
     const teamSetup = setupTeamRepositoryAndUseCase()

@@ -1,46 +1,45 @@
 import { beforeEach, describe, expect, it } from "vitest"
-import { hash } from "bcryptjs"
-import { InMemoryTeamsRepository } from "@/repositories/in-memory/in-memory-team-repository"
-import { GetTeamsUseCase } from "./get-teams"
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-user-repository"
 import { User } from "@prisma/client"
-
-let teamsRepository: InMemoryTeamsRepository
-let sut: GetTeamsUseCase
-
-let usersRepository: InMemoryUsersRepository
-let user: User
+import { setupTeamRepositoryAndUseCase, setupUserRepositoryAndUseCase } from "./helpers/setup-repositories"
+import { makeUser } from "./factories/user-factory"
+import { makeTeam } from "./factories/team-factory"
 
 describe('Get All Teams Use Case', () => {
-  beforeEach(async () => {
-    teamsRepository = new InMemoryTeamsRepository()
-    sut = new GetTeamsUseCase(teamsRepository)
+  let teamsRepository: ReturnType<typeof setupTeamRepositoryAndUseCase>['teamsRepository']
+  let usersRepository: ReturnType<typeof setupUserRepositoryAndUseCase>['usersRepository']
+  let sut: ReturnType<typeof setupTeamRepositoryAndUseCase>['getTeamsUseCase']
+  let user: User
 
-    usersRepository = new InMemoryUsersRepository()
-    user = await usersRepository.create({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      password_hash: await hash('123456', 6),
-      rule: 'QA',
-      active: true
-    })
+  beforeEach(async () => {
+    const teamSetup = setupTeamRepositoryAndUseCase()
+    teamsRepository = teamSetup.teamsRepository
+    sut = teamSetup.getTeamsUseCase
+
+    const userSetup = setupUserRepositoryAndUseCase()
+    usersRepository = userSetup.usersRepository
+
+    // Criar usuário de teste usando a factory
+    user = await makeUser(usersRepository)
   })
 
   it('should be able fetch all teams', async () => {
-    await teamsRepository.create({
+    // Arrange
+    await makeTeam(teamsRepository, {
       name: 'team-01',
       userId: user.id
     })
 
-    await teamsRepository.create({
+    await makeTeam(teamsRepository, {
       name: 'team-02',
       userId: user.id
     })
 
+    // Act
     const { teams } = await sut.execute({
       page: 1
     })
 
+    // Assert
     expect(teams).toHaveLength(2)
     expect(teams).toEqual([
       expect.objectContaining({ name: 'team-01' }),
@@ -49,17 +48,20 @@ describe('Get All Teams Use Case', () => {
   })
 
   it('should be able to fetch all paginated teams', async () => {
+    // Arrange
     for (let i = 1; i <= 22; i++) {
-      await teamsRepository.create({
+      await makeTeam(teamsRepository, {
         name: `team-${i}`,
         userId: user.id
       })
     }
 
+    // Act
     const { teams } = await sut.execute({
       page: 2
     })
 
+    // Assert
     expect(teams).toHaveLength(2)
     expect(teams).toEqual([
       expect.objectContaining({ name: 'team-21' }),
