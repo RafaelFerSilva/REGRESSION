@@ -1,12 +1,6 @@
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-user-repository"
 import { beforeEach, describe, expect, it } from "vitest"
-import { hash } from "bcryptjs"
-import { GetUsersByRuleUseCase } from "./get-users-by-rule"
 import { setupUserRepositoryAndUseCase } from "./helpers/setup-repositories"
 import { makeUser } from "./factories/user-factory"
-
-let usersRepository: InMemoryUsersRepository
-let sut: GetUsersByRuleUseCase
 
 describe('Get Users By Rule Use Case', () => {
   let usersRepository: ReturnType<typeof setupUserRepositoryAndUseCase>['usersRepository']

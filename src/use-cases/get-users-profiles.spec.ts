@@ -2,59 +2,51 @@ import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-user
 import { beforeEach, describe, expect, it } from "vitest"
 import { hash } from "bcryptjs"
 import { GetUsersProfilesUseCase } from "./get-users-profiles"
-
-let usersRepository: InMemoryUsersRepository
-let sut: GetUsersProfilesUseCase
+import { setupUserRepositoryAndUseCase } from "./helpers/setup-repositories"
+import { makeUser } from "./factories/user-factory"
 
 describe('Get All Users Profiles Use Case', () => {
+  let usersRepository: ReturnType<typeof setupUserRepositoryAndUseCase>['usersRepository']
+  let sut: ReturnType<typeof setupUserRepositoryAndUseCase>['getUsersProfilesUseCase']
+
   beforeEach(() => {
-    usersRepository = new InMemoryUsersRepository()
-    sut = new GetUsersProfilesUseCase(usersRepository)
+    const userSetup = setupUserRepositoryAndUseCase()
+    usersRepository = userSetup.usersRepository
+    sut = userSetup.getUsersProfilesUseCase
   })
 
   it('should be able fetch all users profiles', async () => {
-    await usersRepository.create({
-      name: 'user-01',
-      email: 'user-01@example.com',
-      password_hash: await hash('123456', 6),
-      rule: 'ADMIN',
-      active: true
-    })
+    // Arrange
+    const user1 = await makeUser(usersRepository)
+    const user2 = await makeUser(usersRepository)
 
-    await usersRepository.create({
-      name: 'user-02',
-      email: 'user-02@example.com',
-      password_hash: await hash('123456', 6),
-      rule: 'QA',
-      active: true
-    })
-
+    // Act
     const { users } = await sut.execute({
       page: 1
     })
 
+    // Assert
     expect(users).toHaveLength(2)
     expect(users).toEqual([
-      expect.objectContaining({ name: 'user-01' }),
-      expect.objectContaining({ name: 'user-02' }),
+      expect.objectContaining({ name: user1.name }),
+      expect.objectContaining({ name: user2.name }),
     ])
   })
 
   it('should be able to fetch all paginated users profiles', async () => {
+    // Arrange
     for (let i = 1; i <= 22; i++) {
-      await usersRepository.create({
-        name: `user-${i}`,
-        email: `user-${i}@example.com`,
-        password_hash: await hash('123456', 6),
-        rule: 'QA',
-        active: true
+      await makeUser(usersRepository, {
+        name: `user-${i}`
       })
     }
 
+    // Act
     const { users } = await sut.execute({
       page: 2
     })
 
+    // Assert
     expect(users).toHaveLength(2)
     expect(users).toEqual([
       expect.objectContaining({ name: 'user-21' }),
