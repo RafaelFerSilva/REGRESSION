@@ -36,8 +36,12 @@ export async function assertPasswordMatches(
 export function assertTeamProperties(
   team: Team | null,
   expected: {
-    name?: string
-    active?: boolean
+    name?: string;
+    active?: boolean;
+    id?: string;
+    created_at?: Date;
+    updated_at?: Date;
+    userId?: string;
   }
 ) {
   if (expected.name) {
@@ -45,5 +49,17 @@ export function assertTeamProperties(
   }
   if (expected.active !== undefined) {
     expect(team?.active).toEqual(expected.active)
+  }
+  if (expected.id) {
+    expect(team?.id).toEqual(expected.id)
+  }
+  if (expected.created_at) {
+    expect(team?.created_at).toEqual(new Date(expected.created_at))
+  }
+  if (expected.updated_at) {
+    expect(team?.updated_at).toEqual(new Date(expected.updated_at))
+  }
+  if (expected.userId) {
+    expect(team?.userId).toEqual(expected.userId)
   }
 }

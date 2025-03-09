@@ -1,43 +1,50 @@
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-user-repository"
+
 import { beforeEach, describe, expect, it } from "vitest"
-import { hash } from "bcryptjs"
-import { InMemoryTeamsRepository } from "@/repositories/in-memory/in-memory-team-repository"
-import { GetTeamUseCase } from "./get-team"
-import { randomUUID } from "node:crypto"
 import { User } from "@prisma/client"
 import { TeamNotFoundError } from "./errors/team-not-found-error"
+import { setupTeamRepositoryAndUseCase, setupUserRepositoryAndUseCase } from "./helpers/setup-repositories"
+import { makeUser } from "./factories/user-factory"
+import { makeTeam } from "./factories/team-factory"
+import { assertTeamProperties } from "./helpers/test-assertions"
 
-let teamsRepository: InMemoryTeamsRepository
-let sut: GetTeamUseCase
-
-let usersRepository: InMemoryUsersRepository
 let user: User
 
 describe('Get Team Use Case', () => {
-  beforeEach(async () => {
-    usersRepository = new InMemoryUsersRepository()
-    teamsRepository = new InMemoryTeamsRepository()
-    sut = new GetTeamUseCase(teamsRepository)
+  let teamsRepository: ReturnType<typeof setupTeamRepositoryAndUseCase>['teamsRepository']
+  let usersRepository: ReturnType<typeof setupUserRepositoryAndUseCase>['usersRepository']
+  let sut: ReturnType<typeof setupTeamRepositoryAndUseCase>['getTeamUseCase']
 
-    user = await usersRepository.create({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      password_hash: await hash('123456', 6),
-      rule: 'QA',
-      active: true
-    })
+  beforeEach(async () => {
+    const teamSetup = setupTeamRepositoryAndUseCase()
+    teamsRepository = teamSetup.teamsRepository
+    sut = teamSetup.getTeamUseCase
+
+    const userSetup = setupUserRepositoryAndUseCase()
+    usersRepository = userSetup.usersRepository
+
+    // Criar usuário de teste usando a factory
+    user = await makeUser(usersRepository)
   })
 
   it('should be able get team', async () => {
-    const { id, name, created_at } = await teamsRepository.create({
-      name: `Team ${randomUUID()}`,
+    // Arrange
+    const createdTeam  = await makeTeam(teamsRepository, {
+      name: 'Team 1',
       userId: user.id
     })
 
-    const { team } = await sut.execute({ teamId: id })
+     // Act
+    const { team } = await sut.execute({ teamId: createdTeam.id })
 
-    expect(name).toEqual(team.name)
-    expect(created_at).toEqual(team.created_at)
+    // Assert
+    assertTeamProperties(team, {
+      name: createdTeam.name,
+      active: true,
+      id: createdTeam.id,
+      created_at: createdTeam.created_at,
+      updated_at: createdTeam.updated_at,
+      userId: createdTeam.userId
+    })
   })
 
   it('should not be able to get team with wrong id', async () => {
