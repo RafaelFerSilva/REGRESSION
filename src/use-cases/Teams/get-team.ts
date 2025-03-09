@@ -1,6 +1,6 @@
 import { TeamResponse } from "@/interfaces/team-interfaces";
 import { TeamsRepository } from "@/repositories/interfaces/teams-repository";
-import { TeamNotFoundError } from "./errors/team-not-found-error";
+import { TeamNotFoundError } from "../errors/team-not-found-error";
 import { Team } from "@prisma/client";
 
 interface GetTeamUseCaseRequest {

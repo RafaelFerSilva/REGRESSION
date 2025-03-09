@@ -1,5 +1,5 @@
 import { PrismaTeamsRepository } from '@/repositories/prisma/prisma-teams-repository'
-import { GetTeamsUseCase } from '../get-teams'
+import { GetTeamsUseCase } from '../Teams/get-teams'
 
 export function makeGetTeamsUseCase() {
   const teamsRepository = new PrismaTeamsRepository()

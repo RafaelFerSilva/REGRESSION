@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it } from "vitest"
 import { User } from "@prisma/client"
-import { setupTeamRepositoryAndUseCase, setupUserRepositoryAndUseCase } from "./helpers/setup-repositories"
-import { makeUser } from "./factories/user-factory"
-import { makeTeam } from "./factories/team-factory"
+import { setupTeamRepositoryAndUseCase, setupUserRepositoryAndUseCase } from "../helpers/setup-repositories"
+import { makeUser } from "../factories/user-factory"
+import { makeTeam } from "../factories/team-factory"
 
 describe('Get All Teams Use Case', () => {
   let teamsRepository: ReturnType<typeof setupTeamRepositoryAndUseCase>['teamsRepository']

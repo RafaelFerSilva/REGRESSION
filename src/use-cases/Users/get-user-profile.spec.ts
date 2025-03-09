@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it } from "vitest"
-import { UserNotFoundError } from "./errors/user-not-found-error"
-import { setupUserRepositoryAndUseCase } from "./helpers/setup-repositories"
-import { makeUser } from "./factories/user-factory"
-import { assertUserProperties } from "./helpers/test-assertions"
+import { UserNotFoundError } from "../errors/user-not-found-error"
+import { setupUserRepositoryAndUseCase } from "../helpers/setup-repositories"
+import { makeUser } from "../factories/user-factory"
+import { assertUserProperties } from "../helpers/test-assertions"
 
 describe('Get User Profile Use Case', () => {
   let usersRepository: ReturnType<typeof setupUserRepositoryAndUseCase>['usersRepository']

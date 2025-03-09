@@ -1,7 +1,7 @@
 import { TeamResponse } from "@/interfaces/team-interfaces";
 import { TeamsRepository } from "@/repositories/interfaces/teams-repository";
 import { UsersRepository } from "@/repositories/interfaces/users-repository";
-import { UserNotFoundError } from "./errors/user-not-found-error";
+import { UserNotFoundError } from "../errors/user-not-found-error";
 
 interface GetUserTeamsUseCaseRequest {
   userId: string

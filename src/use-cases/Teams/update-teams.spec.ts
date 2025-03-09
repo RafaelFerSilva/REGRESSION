@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { Team, User } from '@prisma/client'
-import { TeamNotFoundError } from './errors/team-not-found-error'
+import { TeamNotFoundError } from '../errors/team-not-found-error'
 
 // Importar as factories e helpers
 import { makeUser } from '@/use-cases/factories/user-factory'
 import { makeTeam } from '@/use-cases/factories/team-factory'
 import { setupTeamRepositoryAndUseCase, setupUserRepositoryAndUseCase } from '@/use-cases/helpers/setup-repositories'
-import { assertTeamProperties } from './helpers/test-assertions'
+import { assertTeamProperties } from '../helpers/test-assertions'
 
 describe('Update Team Use Case', () => {
   let teamsRepository: ReturnType<typeof setupTeamRepositoryAndUseCase>['teamsRepository']

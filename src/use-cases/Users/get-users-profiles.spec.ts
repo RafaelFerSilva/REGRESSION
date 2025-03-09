@@ -2,8 +2,8 @@ import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-user
 import { beforeEach, describe, expect, it } from "vitest"
 import { hash } from "bcryptjs"
 import { GetUsersProfilesUseCase } from "./get-users-profiles"
-import { setupUserRepositoryAndUseCase } from "./helpers/setup-repositories"
-import { makeUser } from "./factories/user-factory"
+import { setupUserRepositoryAndUseCase } from "../helpers/setup-repositories"
+import { makeUser } from "../factories/user-factory"
 
 describe('Get All Users Profiles Use Case', () => {
   let usersRepository: ReturnType<typeof setupUserRepositoryAndUseCase>['usersRepository']

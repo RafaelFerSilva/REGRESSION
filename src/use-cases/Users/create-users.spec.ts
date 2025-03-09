@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { CreateUserUseCase } from './create-users'
-import { UserAlreadyExistError } from './errors/user-already-exists-error'
-import { setupUserRepositoryAndUseCase } from './helpers/setup-repositories'
-import { assertPasswordMatches, assertUserProperties } from './helpers/test-assertions'
+import { UserAlreadyExistError } from '../errors/user-already-exists-error'
+import { setupUserRepositoryAndUseCase } from '../helpers/setup-repositories'
+import { assertPasswordMatches, assertUserProperties } from '../helpers/test-assertions'
 
 describe('Register Use Case', () => {
   let usersRepository: ReturnType<typeof setupUserRepositoryAndUseCase>['usersRepository']

@@ -1,7 +1,7 @@
 import { TeamsRepository } from "@/repositories/interfaces/teams-repository";
 import { Team } from "@prisma/client";
-import { UserNotFoundError } from "./errors/user-not-found-error";
-import { TeamAlreadyExistError } from "./errors/team-already-exists-error";
+import { UserNotFoundError } from "../errors/user-not-found-error";
+import { TeamAlreadyExistError } from "../errors/team-already-exists-error";
 import { UsersRepository } from "@/repositories/interfaces/users-repository";
 
 

@@ -1,6 +1,6 @@
 import { Team } from "@prisma/client";
 import { TeamsRepository } from "@/repositories/interfaces/teams-repository";
-import { TeamNotFoundError } from "./errors/team-not-found-error";
+import { TeamNotFoundError } from "../errors/team-not-found-error";
 
 interface UpdateTeamsUseCaseRequest {
   name?: string,

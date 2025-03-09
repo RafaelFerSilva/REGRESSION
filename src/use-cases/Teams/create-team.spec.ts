@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { User } from "@prisma/client";
-import { UserNotFoundError } from "./errors/user-not-found-error";
-import { TeamAlreadyExistError } from "./errors/team-already-exists-error";
+import { UserNotFoundError } from "../errors/user-not-found-error";
+import { TeamAlreadyExistError } from "../errors/team-already-exists-error";
 import { randomUUID } from 'node:crypto'
 
 import { setupTeamRepositoryAndUseCase, setupUserRepositoryAndUseCase } from '@/use-cases/helpers/setup-repositories'
-import { assertTeamProperties } from './helpers/test-assertions'
-import { makeUser } from "./factories/user-factory";
+import { assertTeamProperties } from '../helpers/test-assertions'
+import { makeUser } from "../factories/user-factory";
 
 describe('Team Use Case', () => {
   let usersRepository: ReturnType<typeof setupTeamRepositoryAndUseCase>['usersRepository']

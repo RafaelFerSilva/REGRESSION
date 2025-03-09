@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest"
-import { setupUserRepositoryAndUseCase } from "./helpers/setup-repositories"
-import { makeUser } from "./factories/user-factory"
+import { setupUserRepositoryAndUseCase } from "../helpers/setup-repositories"
+import { makeUser } from "../factories/user-factory"
 
 describe('Get Users By Rule Use Case', () => {
   let usersRepository: ReturnType<typeof setupUserRepositoryAndUseCase>['usersRepository']

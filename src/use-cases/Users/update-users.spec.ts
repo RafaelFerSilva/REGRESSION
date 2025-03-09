@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { User } from '@prisma/client'
 import { UpdateUserUseCase } from './update-users'
-import { EmailAlreadyExistError } from './errors/email-already-exists-error'
-import { PasswordError } from './errors/password-error'
-import { UserNotFoundError } from './errors/user-not-found-error'
+import { EmailAlreadyExistError } from '../errors/email-already-exists-error'
+import { PasswordError } from '../errors/password-error'
+import { UserNotFoundError } from '../errors/user-not-found-error'
 
 
 // Importar as factories e helpers

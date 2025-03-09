@@ -1,8 +1,8 @@
 import { hash } from "bcryptjs";
 import { UsersRepository } from "@/repositories/interfaces/users-repository";
-import { UserNotFoundError } from "./errors/user-not-found-error";
-import { EmailAlreadyExistError } from "./errors/email-already-exists-error";
-import { PasswordError } from "./errors/password-error";
+import { UserNotFoundError } from "../errors/user-not-found-error";
+import { EmailAlreadyExistError } from "../errors/email-already-exists-error";
+import { PasswordError } from "../errors/password-error";
 import { User } from "@prisma/client";
 
 interface UpdateUserUseCaseRequest {
