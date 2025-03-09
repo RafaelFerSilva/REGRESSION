@@ -1,7 +1,4 @@
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-user-repository"
-import { GetUserProfileUseCase } from "./get-user-profile"
 import { beforeEach, describe, expect, it } from "vitest"
-import { hash } from "bcryptjs"
 import { UserNotFoundError } from "./errors/user-not-found-error"
 import { setupUserRepositoryAndUseCase } from "./helpers/setup-repositories"
 import { makeUser } from "./factories/user-factory"
