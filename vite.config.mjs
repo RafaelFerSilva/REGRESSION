@@ -4,6 +4,7 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 export default defineConfig({
   plugins: [tsconfigPaths()],
   test: {
+    environmentMatchGlobs: [['src/http/controllers/**', 'prisma']],
     coverage: {
       exclude: [
         '**/build/**',
@@ -17,21 +18,6 @@ export default defineConfig({
         '**/users.repository.ts',
         ...coverageConfigDefaults.exclude,
       ],
-    },
-    include: ['**/*.{test,spec}.ts'],
-    alias: {
-      '@': '/src', // Make sure this matches your tsconfig paths
-    },
-    // Instead of using workspace, let's try a simpler approach first
-    environment: 'node',
-    environmentOptions: {
-      // Add any global environment options here
-    },
-    // You can specify different environments for specific tests if needed
-    includeFiles: {
-      'src/http/controllers/**': {
-        environment: 'prisma',
-      },
     },
   },
 })
