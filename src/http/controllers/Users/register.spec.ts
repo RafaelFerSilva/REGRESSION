@@ -52,7 +52,7 @@ describe('Register (e2e)', () => {
       email: 'test@example.com',
       password: '123456'
     });
-  
+
     expect(response.statusCode).toEqual(400);
     expect(response.body.message).toEqual('Validation error')
   });
@@ -63,7 +63,7 @@ describe('Register (e2e)', () => {
       email: 'invalid-email',
       password: '123456'
     });
-  
+
     expect(response.statusCode).toEqual(400);
   });
 })
