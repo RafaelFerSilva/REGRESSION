@@ -28,4 +28,15 @@ describe('Profile (e2e)', () => {
       }),
     )
   })
+
+  it('Should be return 404 when user not found', async () => {
+    const token = app.jwt.sign({ sub: '1234567890' }, { expiresIn: '1d' });
+    const profileResponse = await request(app.server)
+      .get('/me')
+      .set('Authorization', `Bearer ${token}`)
+      .send()
+
+    expect(profileResponse.statusCode).toEqual(404)
+    expect(profileResponse.body.message).toEqual('User not found')
+  })
 })

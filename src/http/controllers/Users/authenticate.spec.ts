@@ -46,8 +46,6 @@ describe('Authenticate (e2e)', () => {
       password: '673448453',
     })
 
-    console.log(authResponse.body)
-
     expect(authResponse.statusCode).toEqual(400)
     expect(authResponse.body.message).toEqual('Invalid Credentials')
   })
