@@ -20,6 +20,7 @@ export async function updateUser(request: FastifyRequest, reply: FastifyReply) {
   try {
     const updateUserUseCase = makeUpdateUserUseCase()
     await updateUserUseCase.execute(id, updateData)
+    return reply.status(200).send({ message: "User updated successfully" })
   } catch (error) {
     if (error instanceof UserNotFoundError) return reply.status(400).send({ message: error.message })
     if (error instanceof EmailAlreadyExistError) return reply.status(409).send({ message: error.message })
@@ -27,6 +28,4 @@ export async function updateUser(request: FastifyRequest, reply: FastifyReply) {
 
     throw error
   }
-
-  return reply.status(200).send({ message: "User updated successfully" })
 }

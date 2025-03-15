@@ -1,8 +1,6 @@
-import { User } from '@prisma/client'
-import { hash } from 'bcryptjs'
 import { randomUUID } from 'node:crypto'
 
-interface CreateUserParams {
+interface MakeUserParams {
   id?: string
   name?: string
   email?: string
@@ -11,10 +9,20 @@ interface CreateUserParams {
   active?: boolean
 }
 
+interface MakeUserResponse {
+  name: string
+  email: string
+  password: string
+  rule: string
+  active: boolean
+}
+
+
+
+
 export function makeUserData(
-  override: CreateUserParams = {}
-): CreateUserParams {
-  const password = override.password || '123456'
+  override: MakeUserParams = {}
+): MakeUserResponse {
   
   const user = {
     name: override.name || 'John Doe',

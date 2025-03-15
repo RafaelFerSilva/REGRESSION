@@ -4,7 +4,6 @@ import { env } from './env'
 import fastifyJwt from '@fastify/jwt'
 import { usersRoutes } from './http/controllers/Users/routes'
 import { teamsRoutes } from './http/controllers/Teams/routes'
-import { UserNotFoundError } from './use-cases/errors/user-not-found-error'
 
 export const app = fastify()
 
