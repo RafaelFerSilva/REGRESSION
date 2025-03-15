@@ -30,7 +30,7 @@ export async function createUser(
     name: override.name || `John Doe ${randomUUID().substring(0, 8)}`,
     email: override.email || `user-${randomUUID().substring(0, 8)}@example.com`,
     password: password,
-    rule: override.rule || 'QA',
+    rule: override.rule || 'USER',
     active: override.active !== undefined ? override.active : true,
   })
 

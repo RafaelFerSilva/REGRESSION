@@ -9,8 +9,6 @@ export async function getUsersProfiles(request: FastifyRequest, reply: FastifyRe
 
   const { page } = getUsersProfilesParamsSchema.parse(request.params)
 
-  console.log(page)
-
   try {
     const getUsersProfilesUseCase = makeGetUsersProfilesUseCase()
     const { users } = await getUsersProfilesUseCase.execute({
