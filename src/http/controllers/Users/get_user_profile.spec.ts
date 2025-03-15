@@ -4,6 +4,7 @@ import { app } from '@/app'
 import { createAndAuthenticateUser } from '@/utils/test/create-and-authenticate-user'
 import { assertPasswordMatches, assertUserProperties } from '@/use-cases/helpers/test-assertions'
 import { randomUUID } from 'node:crypto'
+import { makeUserData } from '@/use-cases/factories/User/make-user-data-test'
 
 describe('Get User Profile (e2e)', () => {
   beforeAll(async () => {
@@ -15,18 +16,26 @@ describe('Get User Profile (e2e)', () => {
   })
 
   it('should be able to get user profile', async () => {
-    const { token, user } = await createAndAuthenticateUser(app)
+    const user = await createAndAuthenticateUser(app)
+    const newUser = makeUserData()
+    const findUserResponse = await request(app.server).post('/users').send({
+      name: newUser.name,
+      email: newUser.email,
+      password: newUser.password,
+      rule: newUser.rule,
+    })
+        
     const getUserResponse = await request(app.server)
-      .get(`/user/${user.id}`)
-      .set('Authorization', `Bearer ${token}`)
+      .get(`/user/${findUserResponse.body.user.id}`)
+      .set('Authorization', `Bearer ${user.token}`)
 
     expect(getUserResponse.statusCode).toEqual(200)
-    expect(user.id).toEqual(getUserResponse.body.user.id)
-    assertUserProperties(getUserResponse.body.user, user)
+    expect(findUserResponse.body.user.id).toEqual(getUserResponse.body.user.id)
+    assertUserProperties(getUserResponse.body.user, findUserResponse.body.user)
   })
 
   it('should be return 404 when user not found', async () => {
-    const { token, user } = await createAndAuthenticateUser(app)
+    const { token } = await createAndAuthenticateUser(app)
     const getUserResponse = await request(app.server)
     .get(`/user/${randomUUID()}`)
     .set('Authorization', `Bearer ${token}`)
