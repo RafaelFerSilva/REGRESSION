@@ -31,7 +31,7 @@ describe('Team Use Case', () => {
       userId: user.id
     }
     const { team } = await sut.execute(newTeam)
-
+    
     assertTeamProperties(team, newTeam)
   })
 
