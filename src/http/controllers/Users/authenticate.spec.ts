@@ -3,7 +3,7 @@ import request from 'supertest'
 import { app } from '@/app'
 import { makeUserData } from '@/use-cases/factories/User/make-user-data-test'
 
-describe('Authenticate (e2e)', () => {
+describe('User Authenticate (e2e)', () => {
   beforeAll(async () => {
     await app.ready()
   })
