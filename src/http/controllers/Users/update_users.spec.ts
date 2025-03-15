@@ -41,4 +41,23 @@ describe('Update User (e2e)', () => {
     assertUserProperties(getUserResponse.body.user, newUser)
     await assertPasswordMatches(newUser.password, getUserResponse.body.user.password_hash)
   })
+
+  it('should return 409 when email already exists', async () => {
+    const user1 = await createAndAuthenticateUser(app)
+    const user2 = await createAndAuthenticateUser(app)
+
+    const response = await request(app.server)
+      .patch('/update_user')
+      .set('Authorization', `Bearer ${user1.token}`)
+      .send({
+        id: user2.user.id,
+        name: 'Updated User',
+        email: user1.user.email,
+        password: '123456',
+        rule: 'user'
+      })
+
+    expect(response.statusCode).toEqual(409)
+    expect(response.body.message).toEqual('E-mail already exists.')
+  })
 })
