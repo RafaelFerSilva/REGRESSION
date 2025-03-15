@@ -60,4 +60,24 @@ describe('Update User (e2e)', () => {
     expect(response.statusCode).toEqual(409)
     expect(response.body.message).toEqual('E-mail already exists.')
   })
+
+  it('should return 400 when user not found', async () => {
+    const { token } = await createAndAuthenticateUser(app)
+    const newUser = makeUserData()
+    const uuid = randomUUID()
+
+    const response = await request(app.server)
+      .patch('/update_user')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        id: uuid,
+        name: newUser.name,
+        email: newUser.email,
+        password: newUser.password,
+        rule: newUser.rule
+      })
+
+    expect(response.statusCode).toEqual(400)
+    expect(response.body.message).toEqual('User not found.')
+  })
 })
