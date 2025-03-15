@@ -20,10 +20,6 @@ app.setErrorHandler((error, _, reply) => {
     return reply.status(400).send({ message: 'Validation error', issues: error.format() })
   }
 
-  if (error instanceof UserNotFoundError) {
-    return reply.status(404).send({ message: 'User not found' })
-  }
-
   if (env.NODE_ENV !== 'production') {
     console.error(`ERROR!!!!!!!!!!!!: ${error}`)
   } else {
