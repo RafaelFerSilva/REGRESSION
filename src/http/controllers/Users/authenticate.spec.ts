@@ -38,8 +38,6 @@ describe('Authenticate (e2e)', () => {
       password: '123456',
     })
 
-    console.log(authResponse.body)
-
     expect(authResponse.statusCode).toEqual(400)
     expect(authResponse.body.message).toEqual('Invalid Credentials')
   })
@@ -50,9 +48,16 @@ describe('Authenticate (e2e)', () => {
       password: '123456',
     })
 
-    console.log(authResponse.body)
-
     expect(authResponse.statusCode).toEqual(400)
     expect(authResponse.body.message).toEqual('Validation error')
   })
+
+  it('should return 400 when required fields are missing', async () => {
+    const authResponse = await request(app.server).post('/sessions').send({
+      password: '123456',
+    })
+  
+      expect(authResponse.statusCode).toEqual(400);
+      expect(authResponse.body.message).toEqual('Validation error')
+    });
 })
