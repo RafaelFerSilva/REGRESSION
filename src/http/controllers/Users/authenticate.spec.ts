@@ -43,4 +43,16 @@ describe('Authenticate (e2e)', () => {
     expect(authResponse.statusCode).toEqual(400)
     expect(authResponse.body.message).toEqual('Invalid Credentials')
   })
+
+  it('should return 400 when email format is invalid', async () => {
+    const authResponse = await request(app.server).post('/sessions').send({
+      email: 'fake user',
+      password: '123456',
+    })
+
+    console.log(authResponse.body)
+
+    expect(authResponse.statusCode).toEqual(400)
+    expect(authResponse.body.message).toEqual('Validation error')
+  })
 })
