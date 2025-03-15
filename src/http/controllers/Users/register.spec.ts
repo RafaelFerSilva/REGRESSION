@@ -56,4 +56,14 @@ describe('Register (e2e)', () => {
     expect(response.statusCode).toEqual(400);
     expect(response.body.message).toEqual('Validation error')
   });
+
+  it('should return 400 when email format is invalid', async () => {
+    const response = await request(app.server).post('/users').send({
+      name: 'Test User',
+      email: 'invalid-email',
+      password: '123456'
+    });
+  
+    expect(response.statusCode).toEqual(400);
+  });
 })
