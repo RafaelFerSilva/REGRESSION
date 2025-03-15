@@ -11,7 +11,7 @@ export class InMemoryUsersRepository implements UsersRepository {
       name: data.name,
       email: data.email,
       password_hash: data.password_hash,
-      rule: data.rule,
+      rule: data.rule ?? 'USER',
       active: data.active ?? true,
       created_at: new Date(),
       updated_at: new Date()

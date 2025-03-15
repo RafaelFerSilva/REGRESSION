@@ -7,7 +7,7 @@ interface CreateUserUseCaseRequest {
   name: string,
   email: string,
   password: string,
-  rule: string,
+  rule?: string,
   active?: boolean
 }
 
@@ -25,7 +25,6 @@ export class CreateUserUseCase {
     if (userWithSameEmail) {
       throw new UserAlreadyExistError()
     }
-
 
     const user = await this.usersRepository.create({
       name,

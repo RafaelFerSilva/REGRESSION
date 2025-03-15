@@ -1,5 +1,5 @@
 import { InvalidCredentialsError } from "@/use-cases/errors/invalid-creadentials-error";
-import { makeAuthenticateUseCase } from "@/use-cases/factories/Authenticate/make-authenticate-use-case";
+import { makeAuthenticateUseCase } from "@/use-cases/factories/User/make-authenticate-use-case";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 

@@ -15,7 +15,7 @@ export default defineConfig({
         '**/prisma/**',
         '**/app.ts',
         '**/server.ts',
-        '**/users.repository.ts',
+        '**/factories/**',
         ...coverageConfigDefaults.exclude,
       ],
     },

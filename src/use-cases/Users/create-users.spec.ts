@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { CreateUserUseCase } from './create-users'
 import { UserAlreadyExistError } from '../errors/user-already-exists-error'
 import { setupUserRepositoryAndUseCase } from '../helpers/setup-repositories'
@@ -31,7 +31,7 @@ describe('Register Use Case', () => {
     await assertPasswordMatches(createData.password, user.password_hash)
   })
 
-  it('should hash user password upon registration', async () => {
+  it('should not be abble register a user with same email twice', async () => {
     // Arrange
     const createData = {
       name: 'John Doe',
@@ -57,5 +57,58 @@ describe('Register Use Case', () => {
     });
     
     expect(user.active).toBe(true);
+  });
+
+  it('should respect explicit active=false parameter', async () => {
+    const { user } = await sut.execute({
+      name: 'Inactive User',
+      email: 'inactive@example.com',
+      password: '123456',
+      active: false
+    });
+    
+    expect(user.active).toBe(false);
+  });
+  
+  it('should create user without specifying rule', async () => {
+    const { user } = await sut.execute({
+      name: 'No Rule User',
+      email: 'norule@example.com',
+      password: '123456'
+    });
+
+    expect(user.rule).toBe('USER');
+  });
+  
+  it('should hash the password before storing', async () => {
+    // Esse teste verificaria se a hash está sendo gerada corretamente
+    const createData = {
+      name: 'Hash Test',
+      email: 'hash@example.com',
+      password: '123456'
+    };
+    
+    const { user } = await sut.execute(createData);
+    
+    expect(user.password_hash).not.toBe(createData.password);
+    await assertPasswordMatches('123456', user.password_hash)
+
+  });
+  
+  it('should properly pass data to repository', async () => {
+    // Esse teste requer um spy no método create do repositório
+    const createSpy = vi.spyOn(usersRepository, 'create');
+    
+    await sut.execute({
+      name: 'Repo Test',
+      email: 'repo@example.com',
+      password: '123456'
+    });
+    
+    expect(createSpy).toHaveBeenCalledWith(expect.objectContaining({
+      name: 'Repo Test',
+      email: 'repo@example.com',
+      password_hash: expect.any(String)
+    }));
   });
 })
