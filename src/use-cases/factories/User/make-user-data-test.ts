@@ -28,7 +28,7 @@ export function makeUserData(
     name: override.name || 'John Doe',
     email: override.email || `user-${randomUUID().substring(0, 8)}@example.com`,
     password: override.password || '123456',
-    rule: override.rule || 'QA',
+    rule: override.rule || 'USER',
     active: override.active !== undefined ? override.active : true,
   }
 

@@ -50,7 +50,7 @@ describe('Get Users By Rule Use Case', () => {
 
     // Act
     const { users } = await sut.execute({
-      rule: 'QA',
+      rule: 'USER',
       page: 2
     })
 

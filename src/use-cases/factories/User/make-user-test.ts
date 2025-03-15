@@ -23,7 +23,7 @@ export async function makeUser(
     name: override.name || 'John Doe',
     email: override.email || `user-${randomUUID().substring(0, 8)}@example.com`,
     password_hash: await hash(password, 6),
-    rule: override.rule || 'QA',
+    rule: override.rule || 'USER',
     active: override.active !== undefined ? override.active : true,
   })
 
