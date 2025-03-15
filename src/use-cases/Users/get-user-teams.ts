@@ -24,11 +24,15 @@ export class GetUserTeamsUseCase {
     const teams = await this.teamsRepository.findManyByUserId(user.id, Number(page))
 
     const teamsResponse = teams.map((item) => {
-      return {
+      const teamResponse: TeamResponse = {
+        id: item.id,
         name: item.name,
         created_at: item.created_at,
-        userId: item.userId
+        updated_at: item.updated_at,
+        userId: item.userId,
+        active: item.active
       }
+      return teamResponse
     })
 
     return { 

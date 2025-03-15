@@ -14,14 +14,18 @@ export async function teams(request: FastifyRequest, reply: FastifyReply) {
 
   try {
     const createTeamUseCase = makeCreateTeamCase()
-    await createTeamUseCase.execute({
+    const team = await createTeamUseCase.execute({
       name,
       userId
+    })
+    return reply.status(201).send({
+      message: 'Team created successfully',
+      team
     })
   } catch (error) {
     if (error instanceof UserNotFoundError) return reply.status(400).send({ message: error.message })
     if (error instanceof TeamAlreadyExistError) return reply.status(409).send({ message: error.message })
     throw error
   }
-  return reply.status(201).send()
+  
 }
