@@ -118,4 +118,22 @@ describe('Update User (e2e)', () => {
     expect(response.statusCode).toEqual(400)
     expect(response.body.message).toEqual('Validation error')
   })
+
+  it('should return 400 when required fields (userId) are missing', async () => {
+    const { token } = await createAndAuthenticateUser(app)
+    const newUser = makeUserData()
+
+    const response = await request(app.server)
+      .patch('/update_user')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: newUser.name,
+        email: newUser.email,
+        password: '123',
+        rule: newUser.rule
+      })
+
+    expect(response.statusCode).toEqual(400)
+    expect(response.body.message).toEqual('Validation error')
+  });
 })
