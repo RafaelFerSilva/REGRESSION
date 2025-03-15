@@ -28,18 +28,32 @@ describe('Register (e2e)', () => {
     expect(createdUser.rule).toEqual(newUser.rule)
   })
 
-  it('should be able to register user', async () => {
+  it('should not be able to register user with duplicated email', async () => {
     const newUser = makeUserData()
-    const response = await request(app.server).post('/users').send({
+    await request(app.server).post('/users').send({
       name: newUser.name,
       email: newUser.email,
       password: newUser.password,
     })
 
-    const createdUser = response.body.user
-    expect(response.statusCode).toEqual(201)
-    expect(createdUser.name).toEqual(newUser.name)
-    expect(createdUser.email).toEqual(newUser.email)
-    expect(createdUser.rule).toEqual('USER')
+    const duplicatedEmailResponse = await request(app.server).post('/users').send({
+      name: 'New name',
+      email: newUser.email,
+      password: '123456',
+    })
+
+    expect(duplicatedEmailResponse.statusCode).toEqual(409)
+    expect(duplicatedEmailResponse.body.message).toEqual('Email already exists')
   })
+
+  it('should return 400 when required fields are missing', async () => {
+    const response = await request(app.server).post('/users').send({
+      // Não enviar o campo name, que é obrigatório
+      email: 'test@example.com',
+      password: '123456'
+    });
+  
+    expect(response.statusCode).toEqual(400);
+    expect(response.body.message).toEqual('Validation error')
+  });
 })
