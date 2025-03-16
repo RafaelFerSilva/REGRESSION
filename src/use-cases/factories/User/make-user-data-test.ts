@@ -17,13 +17,7 @@ interface MakeUserResponse {
   active: boolean
 }
 
-
-
-
-export function makeUserData(
-  override: MakeUserParams = {}
-): MakeUserResponse {
-  
+export function makeUserData(override: MakeUserParams = {}): MakeUserResponse {
   const user = {
     name: override.name || 'John Doe',
     email: override.email || `user-${randomUUID().substring(0, 8)}@example.com`,
