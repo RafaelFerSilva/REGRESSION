@@ -8,6 +8,7 @@ import { getUsersByRules } from "./get_users_by_rule";
 import { getUsersProfiles } from "./get_users_profiles";
 import { updateUser } from "./update_users";
 import { profile } from "./profile";
+import { refresh } from "./refresh";
 
 export async function usersRoutes(app: FastifyInstance) {
   app.post('/users', register)
@@ -18,6 +19,8 @@ export async function usersRoutes(app: FastifyInstance) {
   app.get('/user_teams/:userId/:page', { onRequest: [verifyJWT] }, getUserTeams)
   app.get('/user_by_role/:rule/:page', { onRequest: [verifyJWT] }, getUsersByRules)
   app.patch('/update_user', { onRequest: [verifyJWT] }, updateUser)
+
+  app.patch('/token/refresh', refresh)
   
 
   // Authenticated
