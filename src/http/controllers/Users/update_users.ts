@@ -11,7 +11,7 @@ export async function updateUser(request: FastifyRequest, reply: FastifyReply) {
     name: z.string().optional(),
     email: z.string().email().optional(),
     password: z.string().min(6).optional(),
-    rule: z.string().optional(),
+    role: z.string().optional(),
     active: z.boolean().optional()
   })
 

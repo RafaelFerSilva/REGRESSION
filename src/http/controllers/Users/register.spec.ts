@@ -18,14 +18,14 @@ describe('User Register (e2e)', () => {
       name: newUser.name,
       email: newUser.email,
       password: newUser.password,
-      rule: newUser.rule,
+      role: newUser.role,
     })
 
     const createdUser = response.body.user
     expect(response.statusCode).toEqual(201)
     expect(createdUser.name).toEqual(newUser.name)
     expect(createdUser.email).toEqual(newUser.email)
-    expect(createdUser.rule).toEqual(newUser.rule)
+    expect(createdUser.role).toEqual(newUser.role)
   })
 
   it('should not be able to register user with duplicated email', async () => {

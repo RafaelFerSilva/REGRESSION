@@ -27,7 +27,7 @@ describe('Update User (e2e)', () => {
         name: newUser.name,
         email: newUser.email,
         password: newUser.password,
-        rule: newUser.rule
+        role: newUser.role
       })
 
     expect(response.statusCode).toEqual(200)
@@ -54,7 +54,7 @@ describe('Update User (e2e)', () => {
         name: 'Updated User',
         email: user1.user.email,
         password: '123456',
-        rule: 'user'
+        role: 'user'
       })
 
     expect(response.statusCode).toEqual(409)
@@ -74,7 +74,7 @@ describe('Update User (e2e)', () => {
         name: newUser.name,
         email: newUser.email,
         password: newUser.password,
-        rule: newUser.rule
+        role: newUser.role
       })
 
     expect(response.statusCode).toEqual(400)
@@ -93,7 +93,7 @@ describe('Update User (e2e)', () => {
         name: newUser.name,
         email: newUser.email,
         password: '123',
-        rule: newUser.rule
+        role: newUser.role
       })
 
     expect(response.statusCode).toEqual(400)
@@ -112,7 +112,7 @@ describe('Update User (e2e)', () => {
         name: newUser.name,
         email: newUser.email,
         password: '123',
-        rule: newUser.rule
+        role: newUser.role
       })
 
     expect(response.statusCode).toEqual(400)
@@ -130,7 +130,7 @@ describe('Update User (e2e)', () => {
         name: newUser.name,
         email: newUser.email,
         password: '123',
-        rule: newUser.rule
+        role: newUser.role
       })
 
     expect(response.statusCode).toEqual(400)
@@ -149,7 +149,7 @@ describe('Update User (e2e)', () => {
         name: newUser.name,
         email: newUser.email,
         password: '123',
-        rule: newUser.rule
+        role: newUser.role
       })
 
     expect(response.statusCode).toEqual(400)

@@ -22,7 +22,7 @@ describe('Get User Profile (e2e)', () => {
       name: newUser.name,
       email: newUser.email,
       password: newUser.password,
-      rule: newUser.rule,
+      role: newUser.role,
     })
         
     const getUserResponse = await request(app.server)

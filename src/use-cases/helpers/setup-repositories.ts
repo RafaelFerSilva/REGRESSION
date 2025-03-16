@@ -8,7 +8,7 @@ import { GetTeamUseCase } from '../Teams/get-team'
 import { GetTeamsUseCase } from '../Teams/get-teams'
 import { GetUserProfileUseCase } from '../Users/get-user-profile'
 import { GetUserTeamsUseCase } from '../Users/get-user-teams'
-import { GetUsersByRuleUseCase } from '../Users/get-users-by-rule'
+import { GetUsersByRoleUseCase } from '../Users/get-users-by-role'
 import { GetUsersProfilesUseCase } from '../Users/get-users-profiles'
 
 export function setupUserRepositoryAndUseCase() {
@@ -16,7 +16,7 @@ export function setupUserRepositoryAndUseCase() {
   const updateUserUseCase = new UpdateUserUseCase(usersRepository)
   const createUserUseCase = new CreateUserUseCase(usersRepository)
   const getUserProfileUseCase = new GetUserProfileUseCase(usersRepository)
-  const getUserByRuleUseCase = new GetUsersByRuleUseCase(usersRepository)
+  const getUserByRoleUseCase = new GetUsersByRoleUseCase(usersRepository)
   const getUsersProfilesUseCase = new GetUsersProfilesUseCase(usersRepository)
   
   return {
@@ -24,7 +24,7 @@ export function setupUserRepositoryAndUseCase() {
     updateUserUseCase,
     createUserUseCase,
     getUserProfileUseCase,
-    getUserByRuleUseCase,
+    getUserByRoleUseCase,
     getUsersProfilesUseCase
   }
 }

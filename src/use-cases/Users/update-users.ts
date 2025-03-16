@@ -9,7 +9,7 @@ interface UpdateUserUseCaseRequest {
   name?: string;
   email?: string;
   password?: string;
-  rule?: string;
+  role?: string;
   active?: boolean;
 }
 
@@ -40,7 +40,7 @@ export class UpdateUserUseCase {
     }
 
     if (data.name && data.name !== userById.name) updateData.name = data.name;
-    if (data.rule && data.rule !== userById.rule) updateData.rule = data.rule;
+    if (data.role && data.role !== userById.role) updateData.role = data.role;
     if (typeof data.active === "boolean" && data.active !== userById.active && data.active !== undefined && data.active !== null) {
       updateData.active = data.active;
     }

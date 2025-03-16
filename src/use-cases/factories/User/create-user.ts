@@ -8,7 +8,7 @@ interface CreateUserParams {
   name?: string
   email?: string
   password?: string
-  rule?: string
+  role?: string
   active?: boolean
 }
 
@@ -16,7 +16,7 @@ interface UserResponse {
   id: string
   name: string
   email: string
-  rule: string
+  role: string
   active: boolean
 }
 
@@ -30,7 +30,7 @@ export async function createUser(
     name: override.name || `John Doe ${randomUUID().substring(0, 8)}`,
     email: override.email || `user-${randomUUID().substring(0, 8)}@example.com`,
     password: password,
-    rule: override.rule || 'USER',
+    role: override.role || 'USER',
     active: override.active !== undefined ? override.active : true,
   })
 
@@ -38,7 +38,7 @@ export async function createUser(
     id: user.body.user.id,
     name: user.body.user.name,
     email: user.body.user.email,
-    rule: user.body.user.rule,
+    role: user.body.user.role,
     active: user.body.user.active,
   }
 }

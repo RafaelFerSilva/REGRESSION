@@ -11,7 +11,7 @@ export class InMemoryUsersRepository implements UsersRepository {
       name: data.name,
       email: data.email,
       password_hash: data.password_hash,
-      rule: data.rule ?? 'USER',
+      role: data.role ?? 'USER',
       active: data.active ?? true,
       created_at: new Date(),
       updated_at: new Date()
@@ -45,21 +45,21 @@ export class InMemoryUsersRepository implements UsersRepository {
     return this.items.slice((page - 1) * 20, page * 20)
   }
 
-  async findByRule(rule: string, page?: number) {
+  async findByRole(role: string, page?: number) {
     if (page) {
       return this.items
-      .filter((item) => item.rule == rule)
+      .filter((item) => item.role == role)
       .slice((page - 1) * 20, page * 20)
     }
     
-    return this.items.filter((item) => item.rule === rule)
+    return this.items.filter((item) => item.role === role)
   }
 
   async update(id: string, data: Prisma.UserCreateInput){
     const index = this.items.findIndex((item) => item.id == id)
     if (data.name) this.items[index].name = data.name
     if (data.email) this.items[index].email = data.email
-    if (data.rule) this.items[index].rule = data.rule
+    if (data.role) this.items[index].role = data.role
     if (data.active !== undefined) this.items[index].active = data.active
     if (data.password_hash) this.items[index].password_hash = data.password_hash
     return this.items[index]

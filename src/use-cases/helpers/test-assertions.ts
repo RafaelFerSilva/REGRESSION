@@ -7,7 +7,7 @@ export function assertUserProperties(
   expected: {
     name?: string
     email?: string
-    rule?: string
+    role?: string
     active?: boolean
   }
 ) {
@@ -17,8 +17,8 @@ export function assertUserProperties(
   if (expected.email) {
     expect(user.email).toEqual(expected.email)
   }
-  if (expected.rule) {
-    expect(user.rule).toEqual(expected.rule)
+  if (expected.role) {
+    expect(user.role).toEqual(expected.role)
   }
   if (expected.active !== undefined) {
     expect(user.active).toEqual(expected.active)

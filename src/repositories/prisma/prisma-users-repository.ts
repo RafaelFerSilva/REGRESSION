@@ -37,10 +37,10 @@ export class PrismaUsersRepository implements UsersRepository {
     return users.slice((page - 1) * 20, page * 20)
   }
 
-  async findByRule(rule: string, page: number) {
+  async findByRole(role: string, page: number) {
     const users = await prisma.user.findMany({
       where: {
-        rule,
+        role,
       },
     })
 
@@ -60,7 +60,7 @@ export class PrismaUsersRepository implements UsersRepository {
           name: data.name,
           email: data.email,
           password_hash: data.password_hash,
-          rule: data.rule,
+          role: data.role,
           active: data.active
         }
       }

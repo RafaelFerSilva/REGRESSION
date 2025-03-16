@@ -37,7 +37,7 @@ describe('Update User Use Case', () => {
       name: 'Update user',
       email: 'update@example.com',
       password: '12345987',
-      rule: 'ADMIN',
+      role: 'ADMIN',
       active: false
     }
     
@@ -60,7 +60,7 @@ describe('Update User Use Case', () => {
     assertUserProperties(user, {
       name: userTest.name,
       email: userTest.email,
-      rule: userTest.rule,
+      role: userTest.role,
       active: userTest.active
     })
     expect(userTest.password_hash).toEqual(user.password_hash)
@@ -96,7 +96,7 @@ describe('Update User Use Case', () => {
     assertUserProperties(user, {
       name: newName,
       email: userToUpdate1.email,
-      rule: userToUpdate1.rule,
+      role: userToUpdate1.role,
       active: userToUpdate1.active
     })
   })
@@ -112,7 +112,7 @@ describe('Update User Use Case', () => {
     assertUserProperties(user, {
       name: userToUpdate2.name,
       email: userToUpdate2.email,
-      rule: userToUpdate2.rule,
+      role: userToUpdate2.role,
       active: userToUpdate2.active
     })
   })
@@ -138,7 +138,7 @@ describe('Update User Use Case', () => {
     assertUserProperties(user, {
       name: userToUpdate2.name,
       email: userToUpdate2.email,
-      rule: userToUpdate2.rule,
+      role: userToUpdate2.role,
       active: userToUpdate2.active
     })
     await assertPasswordMatches(newPassword, user.password_hash)
@@ -159,19 +159,19 @@ describe('Update User Use Case', () => {
     ).rejects.toThrowError('Password must be at least 6 characters.')
   })
 
-  it('should be able to update only the user rule', async () => {
+  it('should be able to update only the user role', async () => {
 
     // Arrange
-    const newRule = 'ADMIN'
+    const newRole = 'ADMIN'
     
     // Act
-    const { user } = await sut.execute(userToUpdate2.id, { rule: newRule })
+    const { user } = await sut.execute(userToUpdate2.id, { role: newRole })
 
     // Assert
     assertUserProperties(user, {
       name: userToUpdate2.name,
       email: userToUpdate2.email,
-      rule: newRule,
+      role: newRole,
       active: userToUpdate2.active
     })
   })
@@ -184,7 +184,7 @@ describe('Update User Use Case', () => {
      assertUserProperties(result1.user, {
        name: userToUpdate1.name,
        email: userToUpdate1.email,
-       rule: userToUpdate1.rule,
+       role: userToUpdate1.role,
        active: false
      })
 
@@ -195,7 +195,7 @@ describe('Update User Use Case', () => {
      assertUserProperties(result2.user, {
       name: userToUpdate1.name,
       email: userToUpdate1.email,
-      rule: userToUpdate1.rule,
+      role: userToUpdate1.role,
       active: true
     })
     

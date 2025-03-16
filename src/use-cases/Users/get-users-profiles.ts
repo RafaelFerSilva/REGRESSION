@@ -22,7 +22,7 @@ export class GetUsersProfilesUseCase {
         name: item.name,
         email: item.email,
         created_at: item.created_at,
-        rule: item.rule,
+        role: item.role,
         active: item.active
       }
     })

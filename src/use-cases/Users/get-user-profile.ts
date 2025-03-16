@@ -25,7 +25,7 @@ export class GetUserProfileUseCase {
       email: user.email,
       created_at: user.created_at,
       updated_at: user.updated_at,
-      rule: user.rule,
+      role: user.role,
       active: user.active,
       password_hash: user.password_hash,
     }

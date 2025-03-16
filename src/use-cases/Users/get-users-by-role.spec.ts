@@ -2,25 +2,25 @@ import { beforeEach, describe, expect, it } from "vitest"
 import { setupUserRepositoryAndUseCase } from "../helpers/setup-repositories"
 import { makeUser } from "../factories/User/make-user-test"
 
-describe('Get Users By Rule Use Case', () => {
+describe('Get Users By Role Use Case', () => {
   let usersRepository: ReturnType<typeof setupUserRepositoryAndUseCase>['usersRepository']
-  let sut: ReturnType<typeof setupUserRepositoryAndUseCase>['getUserByRuleUseCase']
+  let sut: ReturnType<typeof setupUserRepositoryAndUseCase>['getUserByRoleUseCase']
 
   beforeEach(() => {
     const userSetup = setupUserRepositoryAndUseCase()
     usersRepository = userSetup.usersRepository
-    sut = userSetup.getUserByRuleUseCase
+    sut = userSetup.getUserByRoleUseCase
   })
 
-  it('should be able fetch users by user rule', async () => {
+  it('should be able fetch users by user role', async () => {
     //Arrange
-    const user1 = await makeUser(usersRepository, { rule: 'QA'})
-    const user2 = await makeUser(usersRepository, { rule: 'ADMIN'})
-    const user3 = await makeUser(usersRepository, { rule: 'QA'})
+    const user1 = await makeUser(usersRepository, { role: 'QA'})
+    const user2 = await makeUser(usersRepository, { role: 'ADMIN'})
+    const user3 = await makeUser(usersRepository, { role: 'QA'})
 
     // Act
     const qas = await sut.execute({
-      rule: 'QA'
+      role: 'QA'
     })
 
     // Assert
@@ -32,7 +32,7 @@ describe('Get Users By Rule Use Case', () => {
 
     // Act
     const admin = await sut.execute({
-      rule: 'ADMIN'
+      role: 'ADMIN'
     })
 
     // Assert
@@ -42,7 +42,7 @@ describe('Get Users By Rule Use Case', () => {
     ])
   })
 
-  it('should be able to fetch paginated users by rule', async () => {
+  it('should be able to fetch paginated users by role', async () => {
     // Arrange
     for (let i = 1; i <= 22; i++) {
       await makeUser(usersRepository, { name: `user-${i}`})
@@ -50,7 +50,7 @@ describe('Get Users By Rule Use Case', () => {
 
     // Act
     const { users } = await sut.execute({
-      rule: 'USER',
+      role: 'USER',
       page: 2
     })
 

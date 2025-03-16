@@ -21,7 +21,7 @@ describe('Authenticate Use Case', () => {
       name: 'John Doe',
       email: 'johndoe@example.com',
       password_hash: await hash('123456', 6),
-      rule: 'QA',
+      role: 'QA',
       active: true
     })
 
@@ -49,7 +49,7 @@ describe('Authenticate Use Case', () => {
       name: 'John Doe',
       email: 'johndoe@example.com',
       password_hash: await hash('123456', 6),
-      rule: 'QA',
+      role: 'QA',
       active: true
     })
 
