@@ -1,11 +1,11 @@
-- [x] Criar usuários
-- [x] Listar usuários
+- [x] Criar usuários - Somente se o user estiver a rule ADMIN
+- [x] Listar usuários - Somente se o user estiver a rule ADMIN
 - [x] Atualizar de usuários
 - [x] Retornar usuários pela rule
 
-- [x] Criar times
+- [x] Criar times - Somente se o user estiver a rule ADMIN
 - [x] Listar todos os times
-- [] Atualizar de times
+- [] Atualizar de times - Somente se o user estiver a rule ADMIN
 - [x] Retornar os times criados por um usuário - validar retorno de times
 
 - [X] Criar tabela de log que registre as alterações nas tabelas
