@@ -1,5 +1,5 @@
 import { prisma } from 'lib/prisma'
-import { Prisma } from '@prisma/client'
+import { Prisma, Role } from '@prisma/client'
 import { UsersRepository } from '../interfaces/users-repository'
 
 export class PrismaUsersRepository implements UsersRepository {
@@ -36,7 +36,7 @@ export class PrismaUsersRepository implements UsersRepository {
     return users.slice((page - 1) * 20, page * 20)
   }
 
-  async findByRole(role: string, page: number) {
+  async findByRole(role: Role, page: number) {
     const users = await prisma.user.findMany({
       where: {
         role,
