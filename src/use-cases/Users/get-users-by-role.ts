@@ -1,8 +1,8 @@
-import { UsersRepository } from "@/repositories/interfaces/users-repository";
-import { UserResponse } from "@/interfaces/user-interfaces";
+import { UsersRepository } from '@/repositories/interfaces/users-repository'
+import { UserResponse } from '@/interfaces/user-interfaces'
 
 interface GetUsersByRoleUseCaseRequest {
-  role: string,
+  role: string
   page?: number
 }
 
@@ -11,11 +11,11 @@ interface GetUsersByRoleUseCaseResponse {
 }
 
 export class GetUsersByRoleUseCase {
-  constructor(private userRepository: UsersRepository) { }
+  constructor(private userRepository: UsersRepository) {}
 
   async execute({
     role,
-    page
+    page,
   }: GetUsersByRoleUseCaseRequest): Promise<GetUsersByRoleUseCaseResponse> {
     const users = await this.userRepository.findByRole(role, Number(page))
 
@@ -25,12 +25,12 @@ export class GetUsersByRoleUseCase {
         email: item.email,
         created_at: item.created_at,
         role: item.role,
-        active: item.active
+        active: item.active,
       }
     })
 
     return {
-      users: usersResponse
+      users: usersResponse,
     }
   }
 }

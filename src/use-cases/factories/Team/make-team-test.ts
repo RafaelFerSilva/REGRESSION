@@ -12,7 +12,7 @@ interface CreateTeamParams {
 
 export async function makeTeam(
   teamsRepository: InMemoryTeamsRepository,
-  params: CreateTeamParams
+  params: CreateTeamParams,
 ): Promise<Team> {
   const team = await teamsRepository.create({
     id: params.id || randomUUID(),

@@ -20,8 +20,8 @@ describe('Get Users By Role (e2e)', () => {
 
   it('should be able to get users by Role', async () => {
     const user = await createAndAuthenticateUser(app)
-    const user1 = await createUser({ role: 'QA'})
-    const user2 = await createUser({ role: 'QA'})
+    const user1 = await createUser({ role: 'QA' })
+    const user2 = await createUser({ role: 'QA' })
 
     const users = await request(app.server)
       .get(`/user_by_role/QA/${1}`)
@@ -38,7 +38,7 @@ describe('Get Users By Role (e2e)', () => {
   it('should be able to fetch all paginated users by role', async () => {
     const user = await createAndAuthenticateUser(app)
     for (let i = 1; i <= 22; i++) {
-      await createUser({ name: `user-${i}`})
+      await createUser({ name: `user-${i}` })
     }
 
     const users = await request(app.server)

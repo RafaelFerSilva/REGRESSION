@@ -9,7 +9,7 @@ export function assertUserProperties(
     email?: string
     role?: string
     active?: boolean
-  }
+  },
 ) {
   if (expected.name) {
     expect(user.name).toEqual(expected.name)
@@ -27,7 +27,7 @@ export function assertUserProperties(
 
 export async function assertPasswordMatches(
   plainTextPassword: string,
-  passwordHash: string
+  passwordHash: string,
 ): Promise<void> {
   const doesPasswordMatch = await compare(plainTextPassword, passwordHash)
   expect(doesPasswordMatch).toBeTruthy()
@@ -36,13 +36,13 @@ export async function assertPasswordMatches(
 export function assertTeamProperties(
   team: Team | null,
   expected: {
-    name?: string;
-    active?: boolean;
-    id?: string;
-    created_at?: Date;
-    updated_at?: Date;
-    userId?: string;
-  }
+    name?: string
+    active?: boolean
+    id?: string
+    created_at?: Date
+    updated_at?: Date
+    userId?: string
+  },
 ) {
   if (expected.name) {
     expect(team?.name).toEqual(expected.name)

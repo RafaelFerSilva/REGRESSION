@@ -20,19 +20,21 @@ interface UserResponse {
   active: boolean
 }
 
-
 export async function createUser(
-  override: CreateUserParams = {}
+  override: CreateUserParams = {},
 ): Promise<UserResponse> {
   const password = override.password || '123456'
 
-  const user = await request(app.server).post('/users').send({
-    name: override.name || `John Doe ${randomUUID().substring(0, 8)}`,
-    email: override.email || `user-${randomUUID().substring(0, 8)}@example.com`,
-    password: password,
-    role: override.role || 'USER',
-    active: override.active !== undefined ? override.active : true,
-  })
+  const user = await request(app.server)
+    .post('/users')
+    .send({
+      name: override.name || `John Doe ${randomUUID().substring(0, 8)}`,
+      email:
+        override.email || `user-${randomUUID().substring(0, 8)}@example.com`,
+      password,
+      role: override.role || 'USER',
+      active: override.active !== undefined ? override.active : true,
+    })
 
   return {
     id: user.body.user.id,

@@ -39,12 +39,12 @@ describe('Get Users Profile (e2e)', () => {
   it('should be able to fetch all paginated users profiles', async () => {
     const user = await createAndAuthenticateUser(app)
     for (let i = 1; i <= 22; i++) {
-      await createUser({ name: `user-${i}`})
+      await createUser({ name: `user-${i}` })
     }
 
     const users = await request(app.server)
-    .get(`/users/${2}`)
-    .set('Authorization', `Bearer ${user.token}`)
+      .get(`/users/${2}`)
+      .set('Authorization', `Bearer ${user.token}`)
 
     expect(users.statusCode).toEqual(200)
     expect(users.body.users).toHaveLength(3)

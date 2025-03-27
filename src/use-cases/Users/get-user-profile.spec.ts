@@ -1,12 +1,16 @@
-import { beforeEach, describe, expect, it } from "vitest"
-import { UserNotFoundError } from "../errors/user-not-found-error"
-import { setupUserRepositoryAndUseCase } from "../helpers/setup-repositories"
-import { makeUser } from "../factories/User/make-user-test"
-import { assertUserProperties } from "../helpers/test-assertions"
+import { beforeEach, describe, expect, it } from 'vitest'
+import { UserNotFoundError } from '../errors/user-not-found-error'
+import { setupUserRepositoryAndUseCase } from '../helpers/setup-repositories'
+import { makeUser } from '../factories/User/make-user-test'
+import { assertUserProperties } from '../helpers/test-assertions'
 
 describe('Get User Profile Use Case', () => {
-  let usersRepository: ReturnType<typeof setupUserRepositoryAndUseCase>['usersRepository']
-  let sut: ReturnType<typeof setupUserRepositoryAndUseCase>['getUserProfileUseCase']
+  let usersRepository: ReturnType<
+    typeof setupUserRepositoryAndUseCase
+  >['usersRepository']
+  let sut: ReturnType<
+    typeof setupUserRepositoryAndUseCase
+  >['getUserProfileUseCase']
 
   beforeEach(() => {
     const userSetup = setupUserRepositoryAndUseCase()
@@ -20,7 +24,7 @@ describe('Get User Profile Use Case', () => {
 
     // Act
     const { user } = await sut.execute({
-      userId: createdUser.id
+      userId: createdUser.id,
     })
 
     // Assert
@@ -35,4 +39,3 @@ describe('Get User Profile Use Case', () => {
     ).rejects.toBeInstanceOf(UserNotFoundError)
   })
 })
-

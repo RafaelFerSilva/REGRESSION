@@ -1,5 +1,5 @@
-import { TeamResponse } from "@/interfaces/team-interfaces";
-import { TeamsRepository } from "@/repositories/interfaces/teams-repository";
+import { TeamResponse } from '@/interfaces/team-interfaces'
+import { TeamsRepository } from '@/repositories/interfaces/teams-repository'
 
 interface GetTeamsUseCaseRequest {
   page: number
@@ -23,12 +23,12 @@ export class GetTeamsUseCase {
         name: item.name,
         created_at: item.created_at,
         userId: item.userId,
-        active: item.active
+        active: item.active,
       }
     })
 
-    return { 
-      teams: teamsResponse
+    return {
+      teams: teamsResponse,
     }
   }
 }

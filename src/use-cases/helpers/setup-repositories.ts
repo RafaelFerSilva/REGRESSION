@@ -18,14 +18,14 @@ export function setupUserRepositoryAndUseCase() {
   const getUserProfileUseCase = new GetUserProfileUseCase(usersRepository)
   const getUserByRoleUseCase = new GetUsersByRoleUseCase(usersRepository)
   const getUsersProfilesUseCase = new GetUsersProfilesUseCase(usersRepository)
-  
+
   return {
     usersRepository,
     updateUserUseCase,
     createUserUseCase,
     getUserProfileUseCase,
     getUserByRoleUseCase,
-    getUsersProfilesUseCase
+    getUsersProfilesUseCase,
   }
 }
 
@@ -33,11 +33,17 @@ export function setupTeamRepositoryAndUseCase() {
   const teamsRepository = new InMemoryTeamsRepository()
   const usersRepository = new InMemoryUsersRepository()
   const updateTeamsUseCase = new UpdateTeamsUseCase(teamsRepository)
-  const createTeamsUseCase = new CreateTeamUseCase(teamsRepository, usersRepository)
+  const createTeamsUseCase = new CreateTeamUseCase(
+    teamsRepository,
+    usersRepository,
+  )
   const getTeamUseCase = new GetTeamUseCase(teamsRepository)
   const getTeamsUseCase = new GetTeamsUseCase(teamsRepository)
-  const getUserTeamsUseCase = new GetUserTeamsUseCase(teamsRepository, usersRepository)
-  
+  const getUserTeamsUseCase = new GetUserTeamsUseCase(
+    teamsRepository,
+    usersRepository,
+  )
+
   return {
     teamsRepository,
     updateTeamsUseCase,
@@ -45,6 +51,6 @@ export function setupTeamRepositoryAndUseCase() {
     usersRepository,
     getTeamUseCase,
     getTeamsUseCase,
-    getUserTeamsUseCase
+    getUserTeamsUseCase,
   }
 }

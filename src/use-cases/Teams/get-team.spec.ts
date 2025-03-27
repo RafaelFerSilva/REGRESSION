@@ -1,15 +1,21 @@
-
-import { beforeEach, describe, expect, it } from "vitest"
-import { User } from "@prisma/client"
-import { TeamNotFoundError } from "../errors/team-not-found-error"
-import { setupTeamRepositoryAndUseCase, setupUserRepositoryAndUseCase } from "../helpers/setup-repositories"
-import { makeUser } from "../factories/User/make-user-test"
-import { makeTeam } from "../factories/Team/make-team-test"
-import { assertTeamProperties } from "../helpers/test-assertions"
+import { beforeEach, describe, expect, it } from 'vitest'
+import { User } from '@prisma/client'
+import { TeamNotFoundError } from '../errors/team-not-found-error'
+import {
+  setupTeamRepositoryAndUseCase,
+  setupUserRepositoryAndUseCase,
+} from '../helpers/setup-repositories'
+import { makeUser } from '../factories/User/make-user-test'
+import { makeTeam } from '../factories/Team/make-team-test'
+import { assertTeamProperties } from '../helpers/test-assertions'
 
 describe('Get Team Use Case', () => {
-  let teamsRepository: ReturnType<typeof setupTeamRepositoryAndUseCase>['teamsRepository']
-  let usersRepository: ReturnType<typeof setupUserRepositoryAndUseCase>['usersRepository']
+  let teamsRepository: ReturnType<
+    typeof setupTeamRepositoryAndUseCase
+  >['teamsRepository']
+  let usersRepository: ReturnType<
+    typeof setupUserRepositoryAndUseCase
+  >['usersRepository']
   let sut: ReturnType<typeof setupTeamRepositoryAndUseCase>['getTeamUseCase']
   let user: User
 
@@ -27,12 +33,12 @@ describe('Get Team Use Case', () => {
 
   it('should be able get team', async () => {
     // Arrange
-    const createdTeam  = await makeTeam(teamsRepository, {
+    const createdTeam = await makeTeam(teamsRepository, {
       name: 'Team 1',
-      userId: user.id
+      userId: user.id,
     })
 
-     // Act
+    // Act
     const { team } = await sut.execute({ teamId: createdTeam.id })
 
     // Assert
@@ -42,7 +48,7 @@ describe('Get Team Use Case', () => {
       id: createdTeam.id,
       created_at: createdTeam.created_at,
       updated_at: createdTeam.updated_at,
-      userId: createdTeam.userId
+      userId: createdTeam.userId,
     })
   })
 
@@ -52,4 +58,3 @@ describe('Get Team Use Case', () => {
     ).rejects.toBeInstanceOf(TeamNotFoundError)
   })
 })
-

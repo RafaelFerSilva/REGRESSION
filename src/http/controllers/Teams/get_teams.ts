@@ -1,11 +1,11 @@
-import { TeamNotFoundError } from "@/use-cases/errors/team-not-found-error";
-import { makeGetTeamsUseCase } from "@/use-cases/factories/Team/make-teams-use-case";
-import { FastifyRequest, FastifyReply } from "fastify";
-import { z } from "zod";
+import { TeamNotFoundError } from '@/use-cases/errors/team-not-found-error'
+import { makeGetTeamsUseCase } from '@/use-cases/factories/Team/make-teams-use-case'
+import { FastifyRequest, FastifyReply } from 'fastify'
+import { z } from 'zod'
 
 export async function getTeams(request: FastifyRequest, reply: FastifyReply) {
-  const getTeamsParamsSchema  = z.object({
-    page: z.string()
+  const getTeamsParamsSchema = z.object({
+    page: z.string(),
   })
 
   const { page } = getTeamsParamsSchema.parse(request.params)
@@ -13,11 +13,12 @@ export async function getTeams(request: FastifyRequest, reply: FastifyReply) {
   try {
     const getTeamsUseCase = makeGetTeamsUseCase()
     const { teams } = await getTeamsUseCase.execute({
-      page: Number(page)
+      page: Number(page),
     })
-    return reply.status(200).send({ teams });
+    return reply.status(200).send({ teams })
   } catch (error) {
-    if (error instanceof TeamNotFoundError) return reply.status(404).send({ message: error.message })
+    if (error instanceof TeamNotFoundError)
+      return reply.status(404).send({ message: error.message })
     throw error
   }
 }

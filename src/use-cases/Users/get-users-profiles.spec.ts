@@ -1,10 +1,14 @@
-import { beforeEach, describe, expect, it } from "vitest"
-import { setupUserRepositoryAndUseCase } from "../helpers/setup-repositories"
-import { makeUser } from "../factories/User/make-user-test"
+import { beforeEach, describe, expect, it } from 'vitest'
+import { setupUserRepositoryAndUseCase } from '../helpers/setup-repositories'
+import { makeUser } from '../factories/User/make-user-test'
 
 describe('Get All Users Profiles Use Case', () => {
-  let usersRepository: ReturnType<typeof setupUserRepositoryAndUseCase>['usersRepository']
-  let sut: ReturnType<typeof setupUserRepositoryAndUseCase>['getUsersProfilesUseCase']
+  let usersRepository: ReturnType<
+    typeof setupUserRepositoryAndUseCase
+  >['usersRepository']
+  let sut: ReturnType<
+    typeof setupUserRepositoryAndUseCase
+  >['getUsersProfilesUseCase']
 
   beforeEach(() => {
     const userSetup = setupUserRepositoryAndUseCase()
@@ -19,7 +23,7 @@ describe('Get All Users Profiles Use Case', () => {
 
     // Act
     const { users } = await sut.execute({
-      page: 1
+      page: 1,
     })
 
     // Assert
@@ -34,13 +38,13 @@ describe('Get All Users Profiles Use Case', () => {
     // Arrange
     for (let i = 1; i <= 22; i++) {
       await makeUser(usersRepository, {
-        name: `user-${i}`
+        name: `user-${i}`,
       })
     }
 
     // Act
     const { users } = await sut.execute({
-      page: 2
+      page: 2,
     })
 
     // Assert
@@ -51,4 +55,3 @@ describe('Get All Users Profiles Use Case', () => {
     ])
   })
 })
-

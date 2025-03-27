@@ -1,17 +1,23 @@
-import { beforeEach, describe, expect, it } from "vitest"
-import { User } from "@prisma/client"
-import { UserNotFoundError } from "../errors/user-not-found-error"
-import { setupTeamRepositoryAndUseCase } from "../helpers/setup-repositories"
-import { makeUser } from "../factories/User/make-user-test"
-import { makeTeam } from "../factories/Team/make-team-test"
+import { beforeEach, describe, expect, it } from 'vitest'
+import { User } from '@prisma/client'
+import { UserNotFoundError } from '../errors/user-not-found-error'
+import { setupTeamRepositoryAndUseCase } from '../helpers/setup-repositories'
+import { makeUser } from '../factories/User/make-user-test'
+import { makeTeam } from '../factories/Team/make-team-test'
 
 describe('Get User Teams Use Case', () => {
-  let usersRepository: ReturnType<typeof setupTeamRepositoryAndUseCase>['usersRepository']
-  let teamsRepository: ReturnType<typeof setupTeamRepositoryAndUseCase>['teamsRepository']
-  let sut: ReturnType<typeof setupTeamRepositoryAndUseCase>['getUserTeamsUseCase']
+  let usersRepository: ReturnType<
+    typeof setupTeamRepositoryAndUseCase
+  >['usersRepository']
+  let teamsRepository: ReturnType<
+    typeof setupTeamRepositoryAndUseCase
+  >['teamsRepository']
+  let sut: ReturnType<
+    typeof setupTeamRepositoryAndUseCase
+  >['getUserTeamsUseCase']
   let user_01: User
   let user_02: User
-  
+
   beforeEach(async () => {
     const teamSetup = setupTeamRepositoryAndUseCase()
     teamsRepository = teamSetup.teamsRepository
@@ -27,11 +33,11 @@ describe('Get User Teams Use Case', () => {
     // Arrange
     const team1 = await makeTeam(teamsRepository, { userId: user_01.id })
     const team2 = await makeTeam(teamsRepository, { userId: user_01.id })
-    const team3 =await makeTeam(teamsRepository, { userId: user_02.id })
-    
+    const team3 = await makeTeam(teamsRepository, { userId: user_02.id })
+
     // Act
     const user_01_teams = await sut.execute({
-      userId: user_01.id
+      userId: user_01.id,
     })
 
     // Assert
@@ -43,7 +49,7 @@ describe('Get User Teams Use Case', () => {
 
     // Act
     const user_02_teams = await sut.execute({
-      userId: user_02.id
+      userId: user_02.id,
     })
 
     // Assert
@@ -56,17 +62,17 @@ describe('Get User Teams Use Case', () => {
   it('should be able to fetch all paginated user teams', async () => {
     // Arrange
     for (let i = 1; i <= 22; i++) {
-      await makeTeam(teamsRepository, { 
+      await makeTeam(teamsRepository, {
         id: `team-${i}`,
         name: `team-${i}`,
-        userId: user_01.id
-       })
+        userId: user_01.id,
+      })
     }
 
     // Act
     const { teams } = await sut.execute({
       userId: user_01.id,
-      page: 2
+      page: 2,
     })
 
     // Assert
@@ -81,9 +87,8 @@ describe('Get User Teams Use Case', () => {
     await expect(() =>
       sut.execute({
         userId: 'non-existing-user',
-        page: 1
+        page: 1,
       }),
     ).rejects.toBeInstanceOf(UserNotFoundError)
   })
 })
-

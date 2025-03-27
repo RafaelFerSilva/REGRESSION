@@ -1,5 +1,5 @@
-import { UsersRepository } from "@/repositories/interfaces/users-repository";
-import { UserResponse } from "@/interfaces/user-interfaces";
+import { UsersRepository } from '@/repositories/interfaces/users-repository'
+import { UserResponse } from '@/interfaces/user-interfaces'
 
 interface GetUsersProfilesUseCaseRequest {
   page: number
@@ -23,12 +23,12 @@ export class GetUsersProfilesUseCase {
         email: item.email,
         created_at: item.created_at,
         role: item.role,
-        active: item.active
+        active: item.active,
       }
     })
 
-    return { 
-      users: usersResponse
+    return {
+      users: usersResponse,
     }
   }
 }

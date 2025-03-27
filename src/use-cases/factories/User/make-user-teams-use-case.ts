@@ -4,8 +4,11 @@ import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-reposi
 
 export function makeGetUserTeamsUseCase() {
   const teamsRepository = new PrismaTeamsRepository()
-  const usersRepository = new PrismaUsersRepository
-  const getUserTeamsUseCase = new GetUserTeamsUseCase(teamsRepository, usersRepository)
+  const usersRepository = new PrismaUsersRepository()
+  const getUserTeamsUseCase = new GetUserTeamsUseCase(
+    teamsRepository,
+    usersRepository,
+  )
 
   return getUserTeamsUseCase
 }

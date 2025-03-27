@@ -1,10 +1,8 @@
-import { Prisma, Team } from "@prisma/client";
-import { TeamsRepository } from "../interfaces/teams-repository";
-import { prisma } from "lib/prisma";
+import { Prisma, Team } from '@prisma/client'
+import { TeamsRepository } from '../interfaces/teams-repository'
+import { prisma } from 'lib/prisma'
 
 export class PrismaTeamsRepository implements TeamsRepository {
-
-
   async create(data: Prisma.TeamUncheckedCreateInput): Promise<Team> {
     const team = await prisma.team.create({ data })
     return team
@@ -23,8 +21,8 @@ export class PrismaTeamsRepository implements TeamsRepository {
   async findByName(name: string): Promise<Team | null> {
     const team = await prisma.team.findUnique({
       where: {
-        name
-      }
+        name,
+      },
     })
 
     return team
@@ -36,10 +34,9 @@ export class PrismaTeamsRepository implements TeamsRepository {
   }
 
   async findManyByUserId(userId: string, page?: number) {
-    const teams = await prisma.team.findMany(
-      {
-        where: { userId, }
-      })
+    const teams = await prisma.team.findMany({
+      where: { userId },
+    })
 
     if (page) return teams.slice((page - 1) * 20, page * 20)
 
@@ -47,19 +44,16 @@ export class PrismaTeamsRepository implements TeamsRepository {
   }
 
   async update(teamId: string, data: Partial<Prisma.TeamUncheckedCreateInput>) {
-    const updatedTeam = await prisma.team.update(
-      {
-        where: {
-          id: teamId
-        },
-        data: {
-          name: data.name,
-          active: data.active
-        }
-      }
-    )
+    const updatedTeam = await prisma.team.update({
+      where: {
+        id: teamId,
+      },
+      data: {
+        name: data.name,
+        active: data.active,
+      },
+    })
 
     return updatedTeam
   }
-
 }

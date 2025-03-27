@@ -1,10 +1,14 @@
-import { beforeEach, describe, expect, it } from "vitest"
-import { setupUserRepositoryAndUseCase } from "../helpers/setup-repositories"
-import { makeUser } from "../factories/User/make-user-test"
+import { beforeEach, describe, expect, it } from 'vitest'
+import { setupUserRepositoryAndUseCase } from '../helpers/setup-repositories'
+import { makeUser } from '../factories/User/make-user-test'
 
 describe('Get Users By Role Use Case', () => {
-  let usersRepository: ReturnType<typeof setupUserRepositoryAndUseCase>['usersRepository']
-  let sut: ReturnType<typeof setupUserRepositoryAndUseCase>['getUserByRoleUseCase']
+  let usersRepository: ReturnType<
+    typeof setupUserRepositoryAndUseCase
+  >['usersRepository']
+  let sut: ReturnType<
+    typeof setupUserRepositoryAndUseCase
+  >['getUserByRoleUseCase']
 
   beforeEach(() => {
     const userSetup = setupUserRepositoryAndUseCase()
@@ -13,14 +17,14 @@ describe('Get Users By Role Use Case', () => {
   })
 
   it('should be able fetch users by user role', async () => {
-    //Arrange
-    const user1 = await makeUser(usersRepository, { role: 'QA'})
-    const user2 = await makeUser(usersRepository, { role: 'ADMIN'})
-    const user3 = await makeUser(usersRepository, { role: 'QA'})
+    // Arrange
+    const user1 = await makeUser(usersRepository, { role: 'QA' })
+    const user2 = await makeUser(usersRepository, { role: 'ADMIN' })
+    const user3 = await makeUser(usersRepository, { role: 'QA' })
 
     // Act
     const qas = await sut.execute({
-      role: 'QA'
+      role: 'QA',
     })
 
     // Assert
@@ -32,26 +36,24 @@ describe('Get Users By Role Use Case', () => {
 
     // Act
     const admin = await sut.execute({
-      role: 'ADMIN'
+      role: 'ADMIN',
     })
 
     // Assert
     expect(admin.users).toHaveLength(1)
-    expect(admin.users).toEqual([
-      expect.objectContaining({ name: user2.name })
-    ])
+    expect(admin.users).toEqual([expect.objectContaining({ name: user2.name })])
   })
 
   it('should be able to fetch paginated users by role', async () => {
     // Arrange
     for (let i = 1; i <= 22; i++) {
-      await makeUser(usersRepository, { name: `user-${i}`})
+      await makeUser(usersRepository, { name: `user-${i}` })
     }
 
     // Act
     const { users } = await sut.execute({
       role: 'USER',
-      page: 2
+      page: 2,
     })
 
     // Assert
@@ -62,4 +64,3 @@ describe('Get Users By Role Use Case', () => {
     ])
   })
 })
-

@@ -14,10 +14,10 @@ interface CreateUserParams {
 
 export async function makeUser(
   usersRepository: InMemoryUsersRepository,
-  override: CreateUserParams = {}
+  override: CreateUserParams = {},
 ): Promise<User> {
   const password = override.password || '123456'
-  
+
   const user = await usersRepository.create({
     id: override.id || randomUUID(),
     name: override.name || 'John Doe',

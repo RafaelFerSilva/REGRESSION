@@ -36,11 +36,13 @@ describe('User Register (e2e)', () => {
       password: newUser.password,
     })
 
-    const duplicatedEmailResponse = await request(app.server).post('/users').send({
-      name: 'New name',
-      email: newUser.email,
-      password: '123456',
-    })
+    const duplicatedEmailResponse = await request(app.server)
+      .post('/users')
+      .send({
+        name: 'New name',
+        email: newUser.email,
+        password: '123456',
+      })
 
     expect(duplicatedEmailResponse.statusCode).toEqual(409)
     expect(duplicatedEmailResponse.body.message).toEqual('Email already exists')
@@ -50,20 +52,20 @@ describe('User Register (e2e)', () => {
     const response = await request(app.server).post('/users').send({
       // Não enviar o campo name, que é obrigatório
       email: 'test@example.com',
-      password: '123456'
-    });
+      password: '123456',
+    })
 
-    expect(response.statusCode).toEqual(400);
+    expect(response.statusCode).toEqual(400)
     expect(response.body.message).toEqual('Validation error')
-  });
+  })
 
   it('should return 400 when email format is invalid', async () => {
     const response = await request(app.server).post('/users').send({
       name: 'Test User',
       email: 'invalid-email',
-      password: '123456'
-    });
+      password: '123456',
+    })
 
-    expect(response.statusCode).toEqual(400);
-  });
+    expect(response.statusCode).toEqual(400)
+  })
 })

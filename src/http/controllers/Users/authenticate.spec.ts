@@ -74,8 +74,8 @@ describe('User Authenticate (e2e)', () => {
     const authResponse = await request(app.server).post('/sessions').send({
       password: '123456',
     })
-  
-      expect(authResponse.statusCode).toEqual(400);
-      expect(authResponse.body.message).toEqual('Validation error')
-    });
+
+    expect(authResponse.statusCode).toEqual(400)
+    expect(authResponse.body.message).toEqual('Validation error')
+  })
 })

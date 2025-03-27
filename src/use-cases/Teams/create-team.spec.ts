@@ -1,17 +1,23 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { User } from "@prisma/client";
-import { UserNotFoundError } from "../errors/user-not-found-error";
-import { TeamAlreadyExistError } from "../errors/team-already-exists-error";
+import { beforeEach, describe, expect, it } from 'vitest'
+import { User } from '@prisma/client'
+import { UserNotFoundError } from '../errors/user-not-found-error'
+import { TeamAlreadyExistError } from '../errors/team-already-exists-error'
 import { randomUUID } from 'node:crypto'
 
-import { setupTeamRepositoryAndUseCase, setupUserRepositoryAndUseCase } from '@/use-cases/helpers/setup-repositories'
+import { setupTeamRepositoryAndUseCase } from '@/use-cases/helpers/setup-repositories'
 import { assertTeamProperties } from '../helpers/test-assertions'
-import { makeUser } from "../factories/User/make-user-test";
+import { makeUser } from '../factories/User/make-user-test'
 
 describe('Team Use Case', () => {
-  let usersRepository: ReturnType<typeof setupTeamRepositoryAndUseCase>['usersRepository']
-  let teamsRepository: ReturnType<typeof setupTeamRepositoryAndUseCase>['teamsRepository']
-  let sut: ReturnType<typeof setupTeamRepositoryAndUseCase>['createTeamsUseCase']
+  let usersRepository: ReturnType<
+    typeof setupTeamRepositoryAndUseCase
+  >['usersRepository']
+  let teamsRepository: ReturnType<
+    typeof setupTeamRepositoryAndUseCase
+  >['teamsRepository']
+  let sut: ReturnType<
+    typeof setupTeamRepositoryAndUseCase
+  >['createTeamsUseCase']
   let user: User
 
   beforeEach(async () => {
@@ -28,10 +34,10 @@ describe('Team Use Case', () => {
   it('should be able to create a new team', async () => {
     const newTeam = {
       name: `Team ${randomUUID()}`,
-      userId: user.id
+      userId: user.id,
     }
     const { team } = await sut.execute(newTeam)
-    
+
     assertTeamProperties(team, newTeam)
   })
 
@@ -39,8 +45,8 @@ describe('Team Use Case', () => {
     await expect(
       sut.execute({
         name: `Team ${randomUUID()}`,
-        userId: 'no-existing-user'
-      })
+        userId: 'no-existing-user',
+      }),
     ).rejects.toBeInstanceOf(UserNotFoundError)
   })
 
@@ -48,8 +54,8 @@ describe('Team Use Case', () => {
     await expect(
       sut.execute({
         name: `Team ${randomUUID()}`,
-        userId: ''
-      })
+        userId: '',
+      }),
     ).rejects.toBeInstanceOf(UserNotFoundError)
   })
 
@@ -57,14 +63,14 @@ describe('Team Use Case', () => {
     const teamName = `Team ${randomUUID()}`
     await sut.execute({
       name: teamName,
-      userId: user.id
+      userId: user.id,
     })
 
     await expect(
       sut.execute({
         name: teamName,
-        userId: user.id
-      })
+        userId: user.id,
+      }),
     ).rejects.toBeInstanceOf(TeamAlreadyExistError)
   })
 })

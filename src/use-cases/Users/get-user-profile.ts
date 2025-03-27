@@ -1,6 +1,6 @@
-import { UsersRepository } from "@/repositories/interfaces/users-repository";
-import { UserNotFoundError } from "../errors/user-not-found-error";
-import { User } from "@prisma/client";
+import { UsersRepository } from '@/repositories/interfaces/users-repository'
+import { UserNotFoundError } from '../errors/user-not-found-error'
+import { User } from '@prisma/client'
 
 interface GetUserProfileUseCaseRequest {
   userId: string
@@ -17,7 +17,7 @@ export class GetUserProfileUseCase {
     userId,
   }: GetUserProfileUseCaseRequest): Promise<GetUserProfileUseCaseResponse> {
     const user = await this.userRepository.findById(userId)
-    if(!user) throw new UserNotFoundError()
+    if (!user) throw new UserNotFoundError()
 
     const userResponse = {
       id: user.id,
@@ -30,8 +30,8 @@ export class GetUserProfileUseCase {
       password_hash: user.password_hash,
     }
 
-    return { 
-      user: userResponse
+    return {
+      user: userResponse,
     }
   }
 }

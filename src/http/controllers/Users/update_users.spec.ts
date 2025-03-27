@@ -3,7 +3,10 @@ import request from 'supertest'
 import { app } from '@/app'
 import { makeUserData } from '@/use-cases/factories/User/make-user-data-test'
 import { createAndAuthenticateUser } from '@/utils/test/create-and-authenticate-user'
-import { assertPasswordMatches, assertUserProperties } from '@/use-cases/helpers/test-assertions'
+import {
+  assertPasswordMatches,
+  assertUserProperties,
+} from '@/use-cases/helpers/test-assertions'
 import { randomUUID } from 'node:crypto'
 
 describe('Update User (e2e)', () => {
@@ -27,7 +30,7 @@ describe('Update User (e2e)', () => {
         name: newUser.name,
         email: newUser.email,
         password: newUser.password,
-        role: newUser.role
+        role: newUser.role,
       })
 
     expect(response.statusCode).toEqual(200)
@@ -39,7 +42,10 @@ describe('Update User (e2e)', () => {
 
     expect(getUserResponse.statusCode).toEqual(200)
     assertUserProperties(getUserResponse.body.user, newUser)
-    await assertPasswordMatches(newUser.password, getUserResponse.body.user.password_hash)
+    await assertPasswordMatches(
+      newUser.password,
+      getUserResponse.body.user.password_hash,
+    )
   })
 
   it('should return 409 when email already exists', async () => {
@@ -54,7 +60,7 @@ describe('Update User (e2e)', () => {
         name: 'Updated User',
         email: user1.user.email,
         password: '123456',
-        role: 'user'
+        role: 'user',
       })
 
     expect(response.statusCode).toEqual(409)
@@ -74,7 +80,7 @@ describe('Update User (e2e)', () => {
         name: newUser.name,
         email: newUser.email,
         password: newUser.password,
-        role: newUser.role
+        role: newUser.role,
       })
 
     expect(response.statusCode).toEqual(400)
@@ -93,7 +99,7 @@ describe('Update User (e2e)', () => {
         name: newUser.name,
         email: newUser.email,
         password: '123',
-        role: newUser.role
+        role: newUser.role,
       })
 
     expect(response.statusCode).toEqual(400)
@@ -112,7 +118,7 @@ describe('Update User (e2e)', () => {
         name: newUser.name,
         email: newUser.email,
         password: '123',
-        role: newUser.role
+        role: newUser.role,
       })
 
     expect(response.statusCode).toEqual(400)
@@ -130,12 +136,12 @@ describe('Update User (e2e)', () => {
         name: newUser.name,
         email: newUser.email,
         password: '123',
-        role: newUser.role
+        role: newUser.role,
       })
 
     expect(response.statusCode).toEqual(400)
     expect(response.body.message).toEqual('Validation error')
-  });
+  })
 
   it('should return 400 when required fields (userId) are empty', async () => {
     const { token } = await createAndAuthenticateUser(app)
@@ -149,10 +155,10 @@ describe('Update User (e2e)', () => {
         name: newUser.name,
         email: newUser.email,
         password: '123',
-        role: newUser.role
+        role: newUser.role,
       })
 
     expect(response.statusCode).toEqual(400)
     expect(response.body.message).toEqual('Validation error')
-  });
+  })
 })

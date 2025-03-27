@@ -1,12 +1,19 @@
-import { beforeEach, describe, expect, it } from "vitest"
-import { User } from "@prisma/client"
-import { setupTeamRepositoryAndUseCase, setupUserRepositoryAndUseCase } from "../helpers/setup-repositories"
-import { makeUser } from "../factories/User/make-user-test"
-import { makeTeam } from "../factories/Team/make-team-test"
+import { beforeEach, describe, expect, it } from 'vitest'
+import { User } from '@prisma/client'
+import {
+  setupTeamRepositoryAndUseCase,
+  setupUserRepositoryAndUseCase,
+} from '../helpers/setup-repositories'
+import { makeUser } from '../factories/User/make-user-test'
+import { makeTeam } from '../factories/Team/make-team-test'
 
 describe('Get All Teams Use Case', () => {
-  let teamsRepository: ReturnType<typeof setupTeamRepositoryAndUseCase>['teamsRepository']
-  let usersRepository: ReturnType<typeof setupUserRepositoryAndUseCase>['usersRepository']
+  let teamsRepository: ReturnType<
+    typeof setupTeamRepositoryAndUseCase
+  >['teamsRepository']
+  let usersRepository: ReturnType<
+    typeof setupUserRepositoryAndUseCase
+  >['usersRepository']
   let sut: ReturnType<typeof setupTeamRepositoryAndUseCase>['getTeamsUseCase']
   let user: User
 
@@ -26,17 +33,17 @@ describe('Get All Teams Use Case', () => {
     // Arrange
     await makeTeam(teamsRepository, {
       name: 'team-01',
-      userId: user.id
+      userId: user.id,
     })
 
     await makeTeam(teamsRepository, {
       name: 'team-02',
-      userId: user.id
+      userId: user.id,
     })
 
     // Act
     const { teams } = await sut.execute({
-      page: 1
+      page: 1,
     })
 
     // Assert
@@ -52,13 +59,13 @@ describe('Get All Teams Use Case', () => {
     for (let i = 1; i <= 22; i++) {
       await makeTeam(teamsRepository, {
         name: `team-${i}`,
-        userId: user.id
+        userId: user.id,
       })
     }
 
     // Act
     const { teams } = await sut.execute({
-      page: 2
+      page: 2,
     })
 
     // Assert
@@ -69,4 +76,3 @@ describe('Get All Teams Use Case', () => {
     ])
   })
 })
-

@@ -9,26 +9,25 @@ interface AuthUser {
 }
 
 interface CreateUserParams {
-  name?: string;
+  name?: string
 }
 
 interface CreateTeamResponse {
-  team: Team;
-  userId: string;
+  team: Team
+  userId: string
 }
-
 
 export async function createTeam(
   user: AuthUser,
-  override: CreateUserParams = {}
+  override: CreateUserParams = {},
 ): Promise<CreateTeamResponse> {
-
-  const team = await request(app.server).post('/teams')
+  const team = await request(app.server)
+    .post('/teams')
     .set('Authorization', `Bearer ${user.token}`)
     .send({
-    name: override.name || `Team ${randomUUID().substring(0, 8)}`,
-    userId: user.user.id
-  })
+      name: override.name || `Team ${randomUUID().substring(0, 8)}`,
+      userId: user.user.id,
+    })
 
   return {
     ...team.body.team,

@@ -1,8 +1,7 @@
-import { Prisma, User } from "@prisma/client";
-import { UsersRepository } from "../interfaces/users-repository";
+import { Prisma, User } from '@prisma/client'
+import { UsersRepository } from '../interfaces/users-repository'
 
 export class InMemoryUsersRepository implements UsersRepository {
-  
   public items: User[] = []
 
   async create(data: Prisma.UserCreateInput) {
@@ -14,7 +13,7 @@ export class InMemoryUsersRepository implements UsersRepository {
       role: data.role ?? 'USER',
       active: data.active ?? true,
       created_at: new Date(),
-      updated_at: new Date()
+      updated_at: new Date(),
     }
 
     this.items.push(user)
@@ -22,7 +21,7 @@ export class InMemoryUsersRepository implements UsersRepository {
   }
 
   async findbyEmail(email: string) {
-    const user = this.items.find((item) => item.email == email)
+    const user = this.items.find((item) => item.email === email)
 
     if (!user) {
       return null
@@ -32,9 +31,9 @@ export class InMemoryUsersRepository implements UsersRepository {
   }
 
   async findById(id: string) {
-    const user = this.items.find((item) => item.id == id)
+    const user = this.items.find((item) => item.id === id)
 
-    if(!user) {
+    if (!user) {
       return null
     }
 
@@ -48,15 +47,15 @@ export class InMemoryUsersRepository implements UsersRepository {
   async findByRole(role: string, page?: number) {
     if (page) {
       return this.items
-      .filter((item) => item.role == role)
-      .slice((page - 1) * 20, page * 20)
+        .filter((item) => item.role === role)
+        .slice((page - 1) * 20, page * 20)
     }
-    
+
     return this.items.filter((item) => item.role === role)
   }
 
-  async update(id: string, data: Prisma.UserCreateInput){
-    const index = this.items.findIndex((item) => item.id == id)
+  async update(id: string, data: Prisma.UserCreateInput) {
+    const index = this.items.findIndex((item) => item.id === id)
     if (data.name) this.items[index].name = data.name
     if (data.email) this.items[index].email = data.email
     if (data.role) this.items[index].role = data.role

@@ -27,7 +27,6 @@ describe('Get User Teams (e2e)', () => {
     const teams = await request(app.server)
       .get(`/user_teams/${user.user.id}/${1}`)
       .set('Authorization', `Bearer ${user.token}`)
-  
 
     expect(teams.statusCode).toEqual(200)
     expect(teams.body.teams).toHaveLength(2)
@@ -40,13 +39,13 @@ describe('Get User Teams (e2e)', () => {
   it('should be able to fetch all paginated users teams', async () => {
     const user = await createAndAuthenticateUser(app)
     for (let i = 1; i <= 22; i++) {
-      await createTeam(user, {name: `team-${i}`})
+      await createTeam(user, { name: `team-${i}` })
     }
 
     const teams = await request(app.server)
       .get(`/user_teams/${user.user.id}/${2}`)
       .set('Authorization', `Bearer ${user.token}`)
-    
+
     expect(teams.statusCode).toEqual(200)
     expect(teams.body.teams).toHaveLength(2)
     expect(teams.body.teams).toEqual([

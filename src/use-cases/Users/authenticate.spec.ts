@@ -1,8 +1,8 @@
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-user-repository";
-import { AuthenticateUseCase } from "./authenticate";
-import { hash } from "bcryptjs";
-import { expect, describe, it, beforeEach } from "vitest";
-import { InvalidCredentialsError } from "../errors/invalid-creadentials-error";
+import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-user-repository'
+import { AuthenticateUseCase } from './authenticate'
+import { hash } from 'bcryptjs'
+import { expect, describe, it, beforeEach } from 'vitest'
+import { InvalidCredentialsError } from '../errors/invalid-creadentials-error'
 
 let usersRepository: InMemoryUsersRepository
 let sut: AuthenticateUseCase
@@ -12,7 +12,7 @@ describe('Authenticate Use Case', () => {
     usersRepository = new InMemoryUsersRepository()
     sut = new AuthenticateUseCase(usersRepository)
   })
-  
+
   it('should be able to authenticate', async () => {
     usersRepository = new InMemoryUsersRepository()
     const sut = new AuthenticateUseCase(usersRepository)
@@ -22,10 +22,13 @@ describe('Authenticate Use Case', () => {
       email: 'johndoe@example.com',
       password_hash: await hash('123456', 6),
       role: 'QA',
-      active: true
+      active: true,
     })
 
-    const { user } = await sut.execute({ email: 'johndoe@example.com', password: '123456'})
+    const { user } = await sut.execute({
+      email: 'johndoe@example.com',
+      password: '123456',
+    })
     expect(user.id).toEqual(expect.any(String))
   })
 
@@ -33,7 +36,7 @@ describe('Authenticate Use Case', () => {
     usersRepository = new InMemoryUsersRepository()
     const sut = new AuthenticateUseCase(usersRepository)
 
-    await expect(() => 
+    await expect(() =>
       sut.execute({
         email: 'johndoe@example.com',
         password: '123456',
@@ -50,7 +53,7 @@ describe('Authenticate Use Case', () => {
       email: 'johndoe@example.com',
       password_hash: await hash('123456', 6),
       role: 'QA',
-      active: true
+      active: true,
     })
 
     await expect(() =>
