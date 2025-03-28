@@ -1,3 +1,4 @@
+import { Role } from '@prisma/client'
 import { randomUUID } from 'node:crypto'
 
 interface MakeUserParams {
@@ -5,7 +6,7 @@ interface MakeUserParams {
   name?: string
   email?: string
   password?: string
-  role?: string
+  role?: Role
   active?: boolean
 }
 
@@ -13,7 +14,7 @@ interface MakeUserResponse {
   name: string
   email: string
   password: string
-  role: string
+  role: Role
   active: boolean
 }
 
