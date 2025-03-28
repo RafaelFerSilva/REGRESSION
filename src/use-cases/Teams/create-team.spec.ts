@@ -7,6 +7,7 @@ import { randomUUID } from 'node:crypto'
 import { setupTeamRepositoryAndUseCase } from '@/use-cases/helpers/setup-repositories'
 import { assertTeamProperties } from '../helpers/test-assertions'
 import { makeUser } from '../factories/User/make-user-test'
+import { UnauthorizedError } from '../errors/unauthorizes-error'
 
 describe('Team Use Case', () => {
   let usersRepository: ReturnType<
@@ -16,7 +17,7 @@ describe('Team Use Case', () => {
   let sut: ReturnType<
     typeof setupTeamRepositoryAndUseCase
   >['createTeamsUseCase']
-  let user: User
+  let admin: User
 
   beforeEach(async () => {
     const teamSetup = setupTeamRepositoryAndUseCase()
@@ -25,24 +26,38 @@ describe('Team Use Case', () => {
     usersRepository = teamSetup.usersRepository
 
     // Criar usuário de teste usando a factory
-    user = await makeUser(usersRepository)
+    admin = await makeUser(usersRepository, { role: 'ADMIN' })
   })
 
   it('should be able to create a new team', async () => {
     const newTeam = {
       name: `Team ${randomUUID()}`,
-      userId: user.id,
+      userId: admin.id,
     }
-    const { team } = await sut.execute(newTeam)
+    const { team } = await sut.execute({
+      name: newTeam.name,
+      authenticatedUserId: newTeam.userId,
+    })
 
     assertTeamProperties(team, newTeam)
+  })
+
+  it('should not be able to create a new team if user is not ADMIN', async () => {
+    const user = await makeUser(usersRepository, { role: 'QA' })
+
+    await expect(
+      sut.execute({
+        name: `Team ${randomUUID()}`,
+        authenticatedUserId: user.id,
+      }),
+    ).rejects.toBeInstanceOf(UnauthorizedError)
   })
 
   it('should not be able to create a new team with not existing user', async () => {
     await expect(
       sut.execute({
         name: `Team ${randomUUID()}`,
-        userId: 'no-existing-user',
+        authenticatedUserId: 'no-existing-user',
       }),
     ).rejects.toBeInstanceOf(UserNotFoundError)
   })
@@ -51,7 +66,7 @@ describe('Team Use Case', () => {
     await expect(
       sut.execute({
         name: `Team ${randomUUID()}`,
-        userId: '',
+        authenticatedUserId: '',
       }),
     ).rejects.toBeInstanceOf(UserNotFoundError)
   })
@@ -60,13 +75,13 @@ describe('Team Use Case', () => {
     const teamName = `Team ${randomUUID()}`
     await sut.execute({
       name: teamName,
-      userId: user.id,
+      authenticatedUserId: admin.id,
     })
 
     await expect(
       sut.execute({
         name: teamName,
-        userId: user.id,
+        authenticatedUserId: admin.id,
       }),
     ).rejects.toBeInstanceOf(TeamAlreadyExistError)
   })
