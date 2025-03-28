@@ -1,4 +1,4 @@
-import { User } from '@prisma/client'
+import { Role, User } from '@prisma/client'
 import { hash } from 'bcryptjs'
 import { randomUUID } from 'node:crypto'
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-user-repository'
@@ -8,7 +8,7 @@ interface CreateUserParams {
   name?: string
   email?: string
   password?: string
-  role?: string
+  role?: Role
   active?: boolean
 }
 
