@@ -56,7 +56,11 @@ describe('Update Team Use Case', () => {
     }
 
     // Act
-    const { team } = await sut.execute(teamToUpdate1.id, updateData, admin.id)
+    const { team } = await sut.execute({
+      teamsId: teamToUpdate1.id,
+      data: updateData,
+      authenticatedUserId: admin.id,
+    })
 
     // Assert
     expect(team.name).toEqual(updateData.name)
@@ -71,7 +75,11 @@ describe('Update Team Use Case', () => {
     })
 
     // Act
-    const { team } = await sut.execute(updateTeam.id, updateTeam, admin.id)
+    const { team } = await sut.execute({
+      teamsId: updateTeam.id,
+      data: updateTeam,
+      authenticatedUserId: admin.id,
+    })
 
     // Assert
     expect(team.name).toEqual(updateTeam.name)
@@ -88,12 +96,20 @@ describe('Update Team Use Case', () => {
 
     // Act & Assert
     await expect(() =>
-      sut.execute(nonExistingId, updateData, admin.id),
+      sut.execute({
+        teamsId: nonExistingId,
+        data: updateData,
+        authenticatedUserId: admin.id,
+      }),
     ).rejects.toBeInstanceOf(TeamNotFoundError)
 
     // Verificando a mensagem de erro
     await expect(() =>
-      sut.execute(nonExistingId, updateData, admin.id),
+      sut.execute({
+        teamsId: nonExistingId,
+        data: updateData,
+        authenticatedUserId: admin.id,
+      }),
     ).rejects.toThrowError('Team not found.')
   })
 
@@ -102,11 +118,11 @@ describe('Update Team Use Case', () => {
     const newName = 'Team Silva'
 
     // Act
-    const { team } = await sut.execute(
-      teamToUpdate1.id,
-      { name: newName },
-      admin.id,
-    )
+    const { team } = await sut.execute({
+      teamsId: teamToUpdate1.id,
+      data: { name: newName },
+      authenticatedUserId: admin.id,
+    })
 
     // Assert
     assertTeamProperties(team, {
@@ -117,11 +133,11 @@ describe('Update Team Use Case', () => {
 
   it('should be able to update only the team active status', async () => {
     // Act - Desativando o time
-    const result1 = await sut.execute(
-      teamToUpdate1.id,
-      { active: false },
-      admin.id,
-    )
+    const result1 = await sut.execute({
+      teamsId: teamToUpdate1.id,
+      data: { active: false },
+      authenticatedUserId: admin.id,
+    })
 
     // Assert
     assertTeamProperties(result1.team, {
@@ -130,7 +146,11 @@ describe('Update Team Use Case', () => {
     })
 
     // Act - Reativando o time
-    await sut.execute(teamToUpdate1.id, { active: true }, admin.id)
+    await sut.execute({
+      teamsId: teamToUpdate1.id,
+      data: { active: true },
+      authenticatedUserId: admin.id,
+    })
 
     // Assert
     assertTeamProperties(result1.team, {
@@ -145,7 +165,11 @@ describe('Update Team Use Case', () => {
     const updateData = { name: 'New Name' }
 
     // Act
-    await sut.execute(teamToUpdate1.id, updateData, admin.id)
+    await sut.execute({
+      teamsId: teamToUpdate1.id,
+      data: updateData,
+      authenticatedUserId: admin.id,
+    })
 
     // Assert
     expect(findByIdSpy).toHaveBeenCalledWith(teamToUpdate1.id)
@@ -154,7 +178,11 @@ describe('Update Team Use Case', () => {
   it('should not be able to update if authorized user not found', async () => {
     const updateData = { name: 'New Name' }
     await expect(
-      sut.execute(teamToUpdate1.id, updateData, randomUUID()),
+      sut.execute({
+        teamsId: teamToUpdate1.id,
+        data: updateData,
+        authenticatedUserId: randomUUID(),
+      }),
     ).rejects.toBeInstanceOf(UserNotFoundError)
   })
 
@@ -162,7 +190,11 @@ describe('Update Team Use Case', () => {
     const user = await makeUser(usersRepository, { role: 'QA' })
     const updateData = { name: 'New Name' }
     await expect(
-      sut.execute(teamToUpdate1.id, updateData, user.id),
+      sut.execute({
+        teamsId: teamToUpdate1.id,
+        data: updateData,
+        authenticatedUserId: user.id,
+      }),
     ).rejects.toBeInstanceOf(UnauthorizedError)
   })
 })
