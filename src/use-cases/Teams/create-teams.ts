@@ -1,12 +1,13 @@
 import { TeamsRepository } from '@/repositories/interfaces/teams-repository'
-import { Team } from '@prisma/client'
+import { Role, Team } from '@prisma/client'
 import { UserNotFoundError } from '../errors/user-not-found-error'
 import { TeamAlreadyExistError } from '../errors/team-already-exists-error'
 import { UsersRepository } from '@/repositories/interfaces/users-repository'
+import { UnauthorizedError } from '../errors/unauthorizes-error'
 
 interface TeamUseCaseRequest {
   name: string
-  userId: string
+  authenticatedUserId: string
 }
 
 interface TeamUseCaseResponse {
@@ -21,17 +22,18 @@ export class CreateTeamUseCase {
 
   async execute({
     name,
-    userId,
+    authenticatedUserId,
   }: TeamUseCaseRequest): Promise<TeamUseCaseResponse> {
-    const user = await this.userRepository.findById(userId)
+    const user = await this.userRepository.findById(authenticatedUserId)
     if (!user || user === null) throw new UserNotFoundError()
+    if (user.role !== Role.ADMIN) throw new UnauthorizedError()
 
     const teamWithSameName = await this.teamsRepository.findByName(name)
     if (teamWithSameName) throw new TeamAlreadyExistError()
 
     const team = await this.teamsRepository.create({
       name,
-      userId,
+      userId: authenticatedUserId,
     })
 
     return {

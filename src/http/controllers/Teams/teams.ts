@@ -7,16 +7,15 @@ import { z } from 'zod'
 export async function teams(request: FastifyRequest, reply: FastifyReply) {
   const teamsBodySchema = z.object({
     name: z.string(),
-    userId: z.string().uuid(),
   })
 
-  const { name, userId } = teamsBodySchema.parse(request.body)
+  const { name } = teamsBodySchema.parse(request.body)
 
   try {
     const createTeamUseCase = makeCreateTeamCase()
     const team = await createTeamUseCase.execute({
       name,
-      userId,
+      authenticatedUserId: (request.user as unknown as { sub: string }).sub, // Usa o ID do usuário do token
     })
     return reply.status(201).send({
       message: 'Team created successfully',
