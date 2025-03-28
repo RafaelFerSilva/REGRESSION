@@ -22,7 +22,7 @@ describe('Teams Register (e2e)', () => {
     await prisma.user.deleteMany()
   })
 
-  it('should be able to register team if user is ADMIN', async () => {
+  it('should be able to register team if user are ADMIN', async () => {
     const { user, token } = await createAndAuthenticateUser(app, 'ADMIN')
     const team = makeTeamData()
     const response = await request(app.server)
@@ -37,5 +37,20 @@ describe('Teams Register (e2e)', () => {
     expect(response.statusCode).toEqual(201)
     expect(createdTeam.name).toEqual(team.name)
     expect(createdTeam.userId).toEqual(user.id)
+  })
+
+  it('should not be able to register team if user not are ADMIN', async () => {
+    const { user, token } = await createAndAuthenticateUser(app, 'USER')
+    const team = makeTeamData()
+    const response = await request(app.server)
+      .post('/teams')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: team.name,
+        userId: user.id,
+      })
+
+    expect(response.statusCode).toEqual(401)
+    expect(response.body.message).toEqual('Unauthorized')
   })
 })

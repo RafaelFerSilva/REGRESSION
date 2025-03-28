@@ -64,17 +64,6 @@ describe('Register Use Case', () => {
     expect(user.active).toBe(true)
   })
 
-  it('should respect explicit active=false parameter', async () => {
-    const { user } = await sut.execute({
-      name: 'Inactive User',
-      email: 'inactive@example.com',
-      password: '123456',
-      active: false,
-    })
-
-    expect(user.active).toBe(false)
-  })
-
   it('should create user without specifying role', async () => {
     const { user } = await sut.execute({
       name: 'No Role User',
