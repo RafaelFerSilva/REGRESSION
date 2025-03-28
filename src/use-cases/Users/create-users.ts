@@ -2,13 +2,13 @@ import { hash } from 'bcryptjs'
 import { UserAlreadyExistError } from '../errors/user-already-exists-error'
 import { Role, User } from '@prisma/client'
 import { UsersRepository } from '@/repositories/interfaces/users-repository'
+import { InvalidRoleError } from '../errors/invalid-role-error'
 
 interface CreateUserUseCaseRequest {
   name: string
   email: string
   password: string
-  role?: Role
-  active?: boolean
+  role?: string
 }
 
 interface CreateUserUseCaseResponse {
@@ -23,8 +23,12 @@ export class CreateUserUseCase {
     email,
     password,
     role,
-    active,
   }: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
+    const validRoles = role as Role
+    if (role && !Object.values(Role).includes(validRoles)) {
+      throw new InvalidRoleError()
+    }
+
     const password_hash = await hash(password, 6)
     const userWithSameEmail = await this.usersRepository.findbyEmail(email)
 
@@ -36,8 +40,7 @@ export class CreateUserUseCase {
       name,
       email,
       password_hash,
-      role,
-      active,
+      role: validRoles,
     })
 
     return {
