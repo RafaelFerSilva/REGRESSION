@@ -1,6 +1,9 @@
-import { Team } from '@prisma/client'
+import { Role, Team } from '@prisma/client'
 import { TeamsRepository } from '@/repositories/interfaces/teams-repository'
 import { TeamNotFoundError } from '../errors/team-not-found-error'
+import { UsersRepository } from '@/repositories/interfaces/users-repository'
+import { UserNotFoundError } from '../errors/user-not-found-error'
+import { UnauthorizedError } from '../errors/unauthorizes-error'
 
 interface UpdateTeamsUseCaseRequest {
   name?: string
@@ -12,12 +15,20 @@ interface UpdateTeamsUseCaseResponse {
 }
 
 export class UpdateTeamsUseCase {
-  constructor(private teamsRepository: TeamsRepository) {}
+  constructor(
+    private teamsRepository: TeamsRepository,
+    private userRepository: UsersRepository,
+  ) {}
 
   async execute(
     teamsId: string,
     data: UpdateTeamsUseCaseRequest,
+    authenticatedUserId: string,
   ): Promise<UpdateTeamsUseCaseResponse> {
+    const user = await this.userRepository.findById(authenticatedUserId)
+    if (!user || user === null) throw new UserNotFoundError()
+    if (user.role !== Role.ADMIN) throw new UnauthorizedError()
+
     const teamById = await this.teamsRepository.findById(teamsId)
     if (!teamById) throw new TeamNotFoundError()
 

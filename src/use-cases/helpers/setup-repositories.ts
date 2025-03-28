@@ -32,7 +32,10 @@ export function setupUserRepositoryAndUseCase() {
 export function setupTeamRepositoryAndUseCase() {
   const teamsRepository = new InMemoryTeamsRepository()
   const usersRepository = new InMemoryUsersRepository()
-  const updateTeamsUseCase = new UpdateTeamsUseCase(teamsRepository)
+  const updateTeamsUseCase = new UpdateTeamsUseCase(
+    teamsRepository,
+    usersRepository,
+  )
   const createTeamsUseCase = new CreateTeamUseCase(
     teamsRepository,
     usersRepository,
