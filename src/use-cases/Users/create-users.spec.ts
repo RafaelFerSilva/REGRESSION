@@ -6,6 +6,7 @@ import {
   assertPasswordMatches,
   assertUserProperties,
 } from '../helpers/test-assertions'
+import { InvalidRoleError } from '../errors/invalid-role-error'
 
 describe('Register Use Case', () => {
   let usersRepository: ReturnType<
@@ -72,6 +73,20 @@ describe('Register Use Case', () => {
     })
 
     expect(user.role).toBe('USER')
+  })
+
+  it('should not be able create user with invalid role', async () => {
+    // Arrange
+    const createData = {
+      name: 'John Doe',
+      email: 'johndoe@example.com',
+      password: '123456',
+      role: 'INVALID-ROLE',
+    }
+
+    await expect(() => sut.execute(createData)).rejects.toBeInstanceOf(
+      InvalidRoleError,
+    )
   })
 
   it('should hash the password before storing', async () => {
