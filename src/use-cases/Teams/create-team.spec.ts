@@ -12,9 +12,7 @@ describe('Team Use Case', () => {
   let usersRepository: ReturnType<
     typeof setupTeamRepositoryAndUseCase
   >['usersRepository']
-  let teamsRepository: ReturnType<
-    typeof setupTeamRepositoryAndUseCase
-  >['teamsRepository']
+
   let sut: ReturnType<
     typeof setupTeamRepositoryAndUseCase
   >['createTeamsUseCase']
@@ -22,7 +20,6 @@ describe('Team Use Case', () => {
 
   beforeEach(async () => {
     const teamSetup = setupTeamRepositoryAndUseCase()
-    teamsRepository = teamSetup.teamsRepository
     sut = teamSetup.createTeamsUseCase
 
     usersRepository = teamSetup.usersRepository

@@ -5,7 +5,7 @@
 
 - [x] Criar times - Somente se o user estiver a rule ADMIN
 - [x] Listar todos os times
-- [] Atualizar de times - Somente se o user estiver a rule ADMIN
+- [X] Atualizar de times - Somente se o user estiver a rule ADMIN
 - [x] Retornar os times criados por um usuário - validar retorno de times
 
 - [X] Criar tabela de log que registre as alterações nas tabelas
