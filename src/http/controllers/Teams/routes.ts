@@ -10,7 +10,12 @@ export async function teamsRoutes(app: FastifyInstance) {
   app.addHook('onRequest', verifyJWT)
 
   app.post('/teams', { onRequest: [verifyUserRole('ADMIN')] }, teams)
+  app.patch(
+    '/update_team',
+    { onRequest: [verifyUserRole('ADMIN')] },
+    updateTeams,
+  )
+
   app.get('/team/:teamId', getTeam)
   app.get('/teams/:page', getTeams)
-  app.patch('/update_team', updateTeams)
 }

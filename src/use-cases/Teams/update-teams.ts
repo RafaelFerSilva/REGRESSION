@@ -5,9 +5,15 @@ import { UsersRepository } from '@/repositories/interfaces/users-repository'
 import { UserNotFoundError } from '../errors/user-not-found-error'
 import { UnauthorizedError } from '../errors/unauthorizes-error'
 
-interface UpdateTeamsUseCaseRequest {
+interface UpdateDataProps {
   name?: string
   active?: boolean
+}
+
+interface UpdateTeamsUseCaseRequest {
+  teamsId: string
+  data: UpdateDataProps
+  authenticatedUserId: string
 }
 
 interface UpdateTeamsUseCaseResponse {
@@ -20,11 +26,11 @@ export class UpdateTeamsUseCase {
     private userRepository: UsersRepository,
   ) {}
 
-  async execute(
-    teamsId: string,
-    data: UpdateTeamsUseCaseRequest,
-    authenticatedUserId: string,
-  ): Promise<UpdateTeamsUseCaseResponse> {
+  async execute({
+    teamsId,
+    data,
+    authenticatedUserId,
+  }: UpdateTeamsUseCaseRequest): Promise<UpdateTeamsUseCaseResponse> {
     const user = await this.userRepository.findById(authenticatedUserId)
     if (!user || user === null) throw new UserNotFoundError()
     if (user.role !== Role.ADMIN) throw new UnauthorizedError()

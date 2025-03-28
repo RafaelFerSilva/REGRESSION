@@ -18,7 +18,12 @@ export async function updateTeams(
 
   try {
     const updateTeamsUseCase = makeUpdateTeamUseCase()
-    await updateTeamsUseCase.execute(id, updateData)
+    await updateTeamsUseCase.execute({
+      teamsId: id,
+      data: updateData,
+      authenticatedUserId: (request.user as unknown as { sub: string }).sub,
+    })
+    return reply.status(200).send({ message: 'Teams updated successfully' })
   } catch (error) {
     if (error instanceof TeamNotFoundError)
       return reply.status(400).send({ message: error.message })
@@ -27,6 +32,4 @@ export async function updateTeams(
 
     throw error
   }
-
-  return reply.status(200).send({ message: 'Teams updated successfully' })
 }
