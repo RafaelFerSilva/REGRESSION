@@ -1,27 +1,27 @@
 - [x] Criar usuários - Somente se o user estiver a rule ADMIN
 - [x] Listar usuários - Somente se o user estiver a rule ADMIN
-- [x] Atualizar de usuários
+- [x] Atualização de usuários
 - [x] Retornar usuários pela rule
 
 - [x] Criar times - Somente se o user estiver a rule ADMIN
 - [x] Listar todos os times
-- [X] Atualizar de times - Somente se o user estiver a rule ADMIN
-- [x] Retornar os times criados por um usuário - validar retorno de times
+- [X] Atualização de times - Somente se o user estiver a rule ADMIN
+- [x] Retornar os times criados por um usuário - validar retorno de times - Somente admins criam times
 
 - [X] Criar tabela de log que registre as alterações nas tabelas
 
-- [] Utilizar Helpers e factories nos testes
+- [X] Utilizar Helpers e factories nos testes
 
 - [] Criar features
 - [] Listar features
-- [] Atualizar de features
+- [] Atualização de features
 - [] Listar as features de um time
 - [] Listar as features de um usuário
 
 
 - [] Criar testcases
 - [] Listar testcases
-- [] Atualizar de testcases
+- [] Atualização de testcases
 - [] Listar os testscases de uma feature
 - [] Listar os tests cases de um usuário
 
