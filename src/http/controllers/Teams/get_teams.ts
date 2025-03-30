@@ -5,7 +5,7 @@ import { z } from 'zod'
 
 export async function getTeams(request: FastifyRequest, reply: FastifyReply) {
   const getTeamsParamsSchema = z.object({
-    page: z.string(),
+    page: z.string().default('1').transform(Number),
   })
 
   const { page } = getTeamsParamsSchema.parse(request.params)
