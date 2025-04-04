@@ -20,15 +20,17 @@ jobs:
 
       - run: npm ci
 
+      - run: npm run test
+
       # Executa os testes e gera cobertura em formato LCOV
-      - run: npm run test:coverage
+      # - run: npm run test:coverage
 
       # Salva o relatório como artefato para uso no SonarQube
-      - name: Save coverage report
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage/lcov.info
+      # - name: Save coverage report
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: coverage-report
+      #     path: coverage/lcov.info
           
   sonarqube:
     name: SonarQube
