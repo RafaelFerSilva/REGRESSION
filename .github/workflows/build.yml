@@ -31,11 +31,45 @@ jobs:
       #   with:
       #     name: coverage-report
       #     path: coverage/lcov.info
+
+  run-e2e-tests:
+    name: Run E2E Tests
+    runs-on: ubuntu-latest
+    needs: run-unit-tests
+
+    services:
+      postgres:
+        image: postgres:latest
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: docker
+          POSTGRES_PASSWORD: docker
+          POSTGRES_DB: apiregression
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps: 
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'npm'
+      
+      - run: npm ci
+
+      - run: npm run test:e2e
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
           
   sonarqube:
     name: SonarQube
     runs-on: ubuntu-latest
-    needs: run-unit-tests
+    needs: [run-unit-tests, run-e2e-tests]
     steps:
       - uses: actions/checkout@v4
         with:
