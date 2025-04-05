@@ -2,7 +2,7 @@ name: Build
 on:
   push:
     branches:
-      - main
+    - main
   pull_request:
     types: [opened, synchronize, reopened]
     
@@ -17,26 +17,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'npm'
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'npm'
 
-      - run: npm ci
+    - run: npm ci
 
-      - run: npm run test
+    # Executa os testes e gera cobertura em formato LCOV
+    - run: npm run test:coverage
 
-      # Executa os testes e gera cobertura em formato LCOV
-      # - run: npm run test:coverage
-
-      # Salva o relatório como artefato para uso no SonarQube
-      # - name: Save coverage report
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: coverage-report
-      #     path: coverage/lcov.info
+    # Salva o relatório como artefato para uso no SonarQube
+    - name: Save coverage report
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report
+        path: coverage/lcov.info
 
   run-e2e-tests:
     name: Run E2E Tests
@@ -59,85 +57,87 @@ jobs:
           --health-retries 5
 
     steps: 
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 20
-          cache: 'npm'
-      
-      - run: npm ci
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 20
+        cache: 'npm'
+    
+    - run: npm ci
 
-      - run: npm run test:e2e
-        env:
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          
+    - run: npm run test:e2e
+      env:
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    
   sonarqube:
     name: SonarQube
     runs-on: ubuntu-latest
     needs: [run-unit-tests, run-e2e-tests]
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
-      # - name: Download coverage report
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: coverage-report
-      #     path: coverage
+    - name: Download coverage report
+      uses: actions/download-artifact@v4
+      with:
+        name: coverage-report
+        path: coverage
 
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        with:
-          args: >
-            -Dsonar.organization=quality-org
-            -Dsonar.projectKey=quality-org
-            -Dsonar.sources=.
-            # -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
-          
-      # Análise para a branch principal
-      - name: SonarQube Scan for main branch
-        if: github.event_name == 'push'
-        uses: SonarSource/sonarqube-scan-action@v5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        with:
-          args: >
-            -Dsonar.organization=quality-org
-            -Dsonar.projectKey=quality-org
-            -Dsonar.sources=.
-            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
-            -Dsonar.branch.name=${{ github.ref_name }}
+    - name: SonarQube Scan
+      uses: SonarSource/sonarqube-scan-action@v5
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      with:
+        args: >
+          -Dsonar.organization=quality-org
+          -Dsonar.projectKey=quality-org
+          -Dsonar.sources=.
+          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+    
+    # Análise para a branch principal
+    - name: SonarQube Scan for main branch
+      if: github.event_name == 'push'
+      uses: SonarSource/sonarqube-scan-action@v5
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      with:
+        args: >
+          -Dsonar.organization=quality-org
+          -Dsonar.projectKey=quality-org
+          -Dsonar.sources=.
+          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
+          -Dsonar.branch.name=${{ github.ref_name }}
+          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
 
-      # Análise para Pull Requests (corrigido)
-      - name: SonarQube Scan for PR
-        if: github.event_name == 'pull_request'
-        uses: SonarSource/sonarqube-scan-action@v5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        with:
-          args: >
-            -Dsonar.organization=quality-org
-            -Dsonar.projectKey=quality-org
-            -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
-            -Dsonar.pullrequest.branch=${{ github.head_ref }}
-            -Dsonar.pullrequest.base=${{ github.base_ref }}
-            -Dsonar.pullrequest.github.repository=${{ github.repository }}
-            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
+    # Análise para Pull Requests
+    - name: SonarQube Scan for PR
+      if: github.event_name == 'pull_request'
+      uses: SonarSource/sonarqube-scan-action@v5
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      with:
+        args: >
+          -Dsonar.organization=quality-org
+          -Dsonar.projectKey=quality-org
+          -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
+          -Dsonar.pullrequest.branch=${{ github.head_ref }}
+          -Dsonar.pullrequest.base=${{ github.base_ref }}
+          -Dsonar.pullrequest.github.repository=${{ github.repository }}
+          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
+          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
 
-      # Quality Gate check
-      - name: SonarQube Quality Gate check
-        uses: sonarsource/sonarqube-quality-gate-action@master
-        timeout-minutes: 5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+    # Quality Gate check
+    - name: SonarQube Quality Gate check
+      uses: sonarsource/sonarqube-quality-gate-action@master
+      timeout-minutes: 5
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
