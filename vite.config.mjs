@@ -5,8 +5,10 @@ export default defineConfig({
   plugins: [tsconfigPaths()],
   test: {
     environmentMatchGlobs: [['src/http/controllers/**', 'prisma']],
-    reporters: [['vitest-sonar-reporter', { outputFile: 'sonar-report.xml' }]],
     coverage: {
+      provider: 'v8', // ou 'istanbul'
+      reporter: ['text', 'json', 'html', 'lcov'],
+      reportsDirectory: './coverage',
       exclude: [
         '**/build/**',
         '**/env/**',
