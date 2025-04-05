@@ -1,4 +1,5 @@
-import { PrismaClient, Prisma } from '@prisma/client'
+// /home/rafa/regression/src/lib/prisma.ts
+import { PrismaClient } from '@prisma/client'
 import { env } from '@/env'
 
 // Define os tipos de ação que queremos auditar
@@ -6,64 +7,101 @@ type AuditAction = 'create' | 'update' | 'delete'
 
 // Lista das tabelas que queremos auditar
 const TABLES_TO_AUDIT = ['User', 'TestCase', 'Feature', 'Team']
+const WRITE_OPERATIONS = ['create', 'update', 'delete', 'upsert']
+
+// Função para verificar se a operação deve ser auditada
+function shouldAuditOperation(
+  operation: string,
+  model: string | undefined,
+): boolean {
+  return (
+    WRITE_OPERATIONS.includes(operation) &&
+    TABLES_TO_AUDIT.includes(model || '') &&
+    model !== 'AuditLog'
+  )
+}
+
+// Função para determinar a ação de auditoria
+function determineAuditAction(operation: string, oldData: any): AuditAction {
+  if (operation === 'create') return 'create'
+  if (operation === 'delete') return 'delete'
+  if (operation === 'update') return 'update'
+  // Para upsert, verifica se o registro já existia
+  return oldData ? 'update' : 'create'
+}
+
+// Função para obter o ID do registro
+function getRecordId(
+  operation: string,
+  result: any,
+  oldData: any,
+): string | undefined {
+  if (
+    operation === 'create' ||
+    operation === 'update' ||
+    operation === 'upsert'
+  ) {
+    return result.id
+  }
+  return oldData?.id
+}
+
+// Função para buscar dados antigos antes de modificações
+async function fetchOldData(
+  prisma: any,
+  model: string | undefined,
+  where: any,
+): Promise<any> {
+  try {
+    if (!model) return null
+
+    return await prisma[model.toLowerCase()].findFirst({
+      where,
+    })
+  } catch (error) {
+    console.error(`Failed to fetch old data for ${model}:`, error)
+    return null
+  }
+}
+
+// Função para determinar os novos dados para o log
+function getNewDataForAudit(operation: string, result: any): any {
+  if (['create', 'update', 'upsert'].includes(operation)) {
+    return result
+  }
+  return undefined
+}
 
 // Cria uma extensão do PrismaClient com auditoria
 export function createPrismaClientWithAudit() {
-  const prisma = new PrismaClient({
+  // Criamos uma instância base do PrismaClient para operações de auditoria
+  const prismaBase = new PrismaClient({
     log: env.NODE_ENV === 'dev' ? ['query'] : [],
-  }).$extends({
+  })
+
+  // Estendemos o cliente com funcionalidade de auditoria
+  const prisma = prismaBase.$extends({
     query: {
       async $allOperations({ operation, model, args, query }) {
-        // Ignora operações em AuditLog para evitar recursão infinita
-        if (model === 'AuditLog') {
-          return query(args)
-        }
-
-        // Ignora operações que não são de escrita ou tabelas que não estão na lista
-        if (
-          !['create', 'update', 'delete', 'upsert'].includes(operation) ||
-          !TABLES_TO_AUDIT.includes(model || '')
-        ) {
+        // Ignora operações que não precisam ser auditadas
+        if (!shouldAuditOperation(operation, model)) {
           return query(args)
         }
 
         // Para operações de update e delete, precisamos obter os dados antigos
-        let oldData: any = null
-        if (['update', 'delete'].includes(operation) && args.where) {
-          try {
-            // Busca o registro antes da modificação
-            oldData = await (prisma as any)[
-              model?.toLowerCase() || ''
-            ].findFirst({
-              where: args.where,
-            })
-          } catch (error) {
-            console.error(`Failed to fetch old data for ${model}:`, error)
-          }
-        }
+        const needsOldData = ['update', 'delete', 'upsert'].includes(operation)
+        const oldData = needsOldData
+          ? await fetchOldData(prismaBase, model, args.where)
+          : null
 
         // Executa a operação original
         const result = await query(args)
 
         // Determina a ação de auditoria
-        let action: AuditAction
-        if (operation === 'create') action = 'create'
-        else if (operation === 'update') action = 'update'
-        else if (operation === 'delete') action = 'delete'
-        else if (operation === 'upsert') {
-          // Para upsert, verifica se o registro já existia
-          action = oldData ? 'update' : 'create'
-        } else {
-          return result
-        }
+        const action = determineAuditAction(operation, oldData)
 
         // Determina o ID do registro
-        const recordId =
-          operation === 'create'
-            ? result.id
-            : operation === 'update' || operation === 'upsert'
-              ? result.id
-              : oldData?.id
+        const recordId = getRecordId(operation, result, oldData)
 
         if (!recordId) {
           console.error(`Unable to determine record ID for audit on ${model}`)
@@ -71,19 +109,20 @@ export function createPrismaClientWithAudit() {
         }
 
         // Identifica o usuário que fez a alteração (se disponível no contexto)
-        const userId = (prisma as any)._engineConfig?.context?.userId
+        const userId = (prismaBase as any)._engineConfig?.context?.userId
 
+        // Prepara os novos dados para o log
+        const newData = getNewDataForAudit(operation, result)
+
+        // Cria o registro de auditoria diretamente
         try {
-          // Cria o registro de auditoria
-          await prisma.auditLog.create({
+          await prismaBase.auditLog.create({
             data: {
               table_name: model || '',
               record_id: recordId,
               action,
               old_data: oldData || undefined,
-              new_data: ['create', 'update', 'upsert'].includes(operation)
-                ? result
-                : undefined,
+              new_data: newData,
               changed_by: userId,
             },
           })
