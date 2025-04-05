@@ -10,7 +10,7 @@ const TABLES_TO_AUDIT = ['User', 'TestCase', 'Feature', 'Team']
 const WRITE_OPERATIONS = ['create', 'update', 'delete', 'upsert']
 
 // Função para verificar se a operação deve ser auditada
-function shouldAuditOperation(
+export function shouldAuditOperation(
   operation: string,
   model: string | undefined,
 ): boolean {
@@ -22,7 +22,10 @@ function shouldAuditOperation(
 }
 
 // Função para determinar a ação de auditoria
-function determineAuditAction(operation: string, oldData: any): AuditAction {
+export function determineAuditAction(
+  operation: string,
+  oldData: any,
+): AuditAction {
   if (operation === 'create') return 'create'
   if (operation === 'delete') return 'delete'
   if (operation === 'update') return 'update'
@@ -31,7 +34,7 @@ function determineAuditAction(operation: string, oldData: any): AuditAction {
 }
 
 // Função para obter o ID do registro
-function getRecordId(
+export function getRecordId(
   operation: string,
   result: any,
   oldData: any,
@@ -65,7 +68,7 @@ async function fetchOldData(
 }
 
 // Função para determinar os novos dados para o log
-function getNewDataForAudit(operation: string, result: any): any {
+export function getNewDataForAudit(operation: string, result: any): any {
   if (['create', 'update', 'upsert'].includes(operation)) {
     return result
   }
