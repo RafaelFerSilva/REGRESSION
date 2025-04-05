@@ -96,6 +96,8 @@ jobs:
           -Dsonar.organization=quality-org
           -Dsonar.projectKey=quality-org
           -Dsonar.sources=.
+          -Dsonar.exclusions=**/*.test.js,**/*.test.ts,**/*.spec.js,**/*.spec.ts,**/tests/**/*,**/test/**/*,**/__tests__/**/*,**/__mocks__/**/*
+          -Dsonar.test.inclusions=**/*.test.js,**/*.test.ts,**/*.spec.js,**/*.spec.ts,**/tests/**/*,**/test/**/*,**/__tests__/**/*
           -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
     
     # Análise para a branch principal
@@ -111,6 +113,8 @@ jobs:
           -Dsonar.organization=quality-org
           -Dsonar.projectKey=quality-org
           -Dsonar.sources=.
+          -Dsonar.exclusions=**/*.test.js,**/*.test.ts,**/*.spec.js,**/*.spec.ts,**/tests/**/*,**/test/**/*,**/__tests__/**/*,**/__mocks__/**/*
+          -Dsonar.test.inclusions=**/*.test.js,**/*.test.ts,**/*.spec.js,**/*.spec.ts,**/tests/**/*,**/test/**/*,**/__tests__/**/*
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
           -Dsonar.branch.name=${{ github.ref_name }}
           -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
@@ -127,6 +131,8 @@ jobs:
         args: >
           -Dsonar.organization=quality-org
           -Dsonar.projectKey=quality-org
+          -Dsonar.exclusions=**/*.test.js,**/*.test.ts,**/*.spec.js,**/*.spec.ts,**/tests/**/*,**/test/**/*,**/__tests__/**/*,**/__mocks__/**/*
+          -Dsonar.test.inclusions=**/*.test.js,**/*.test.ts,**/*.spec.js,**/*.spec.ts,**/tests/**/*,**/test/**/*,**/__tests__/**/*
           -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
           -Dsonar.pullrequest.branch=${{ github.head_ref }}
           -Dsonar.pullrequest.base=${{ github.base_ref }}
