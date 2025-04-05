@@ -16,7 +16,7 @@ function shouldAuditOperation(
 ): boolean {
   return (
     WRITE_OPERATIONS.includes(operation) &&
-    TABLES_TO_AUDIT.includes(model || '') &&
+    TABLES_TO_AUDIT.includes(model ?? '') &&
     model !== 'AuditLog'
   )
 }
